@@ -1,0 +1,131 @@
+// Shipment types and helpers. Data lives in Lovable Cloud (Supabase).
+import { supabase } from "@/integrations/supabase/client";
+
+export type HistoryEvent = { time?: string; at?: string; label: string };
+
+export type Shipment = {
+  id: string;
+  trackingNumber: string;
+  status: string;
+  origin: { name: string; lat: number; lng: number };
+  destination: { name: string; lat: number; lng: number };
+  currentPosition: { lat: number; lng: number };
+  /** Progress along the route 0..1 */
+  progress: number;
+  /** Estimated remaining wait time in minutes */
+  etaMinutes: number;
+  carrier: string;
+  weight: string | null;
+  service: string | null;
+  /** ISO date string of when the package was shipped */
+  shippedAt: string;
+  history: HistoryEvent[];
+};
+
+type ShipmentRow = {
+  id: string;
+  tracking_number: string;
+  status: string;
+  origin_city: string;
+  origin_lat: number;
+  origin_lng: number;
+  destination_city: string;
+  destination_lat: number;
+  destination_lng: number;
+  current_lat: number | null;
+  current_lng: number | null;
+  progress: number;
+  eta_minutes: number;
+  carrier: string;
+  weight: string | null;
+  service: string | null;
+  shipped_date: string;
+  history: unknown;
+};
+
+function rowToShipment(r: ShipmentRow): Shipment {
+  const progressFraction = (r.progress ?? 0) / 100;
+  return {
+    id: r.id,
+    trackingNumber: r.tracking_number,
+    status: r.status,
+    origin: { name: r.origin_city, lat: r.origin_lat, lng: r.origin_lng },
+    destination: {
+      name: r.destination_city,
+      lat: r.destination_lat,
+      lng: r.destination_lng,
+    },
+    currentPosition: {
+      lat: r.current_lat ?? r.origin_lat,
+      lng: r.current_lng ?? r.origin_lng,
+    },
+    progress: progressFraction,
+    etaMinutes: r.eta_minutes,
+    carrier: r.carrier,
+    weight: r.weight,
+    service: r.service,
+    shippedAt: r.shipped_date,
+    history: Array.isArray(r.history) ? (r.history as HistoryEvent[]) : [],
+  };
+}
+
+export async function findShipment(tracking: string): Promise<Shipment | null> {
+  const t = tracking.trim();
+  if (!t) return null;
+  const { data, error } = await supabase
+    .from("shipments")
+    .select("*")
+    .ilike("tracking_number", t)
+    .maybeSingle();
+  if (error || !data) return null;
+  return rowToShipment(data as ShipmentRow);
+}
+
+export async function listShipments(): Promise<Shipment[]> {
+  const { data, error } = await supabase
+    .from("shipments")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error || !data) return [];
+  return (data as ShipmentRow[]).map(rowToShipment);
+}
+
+export async function listSampleTrackingNumbers(limit = 4): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("shipments")
+    .select("tracking_number")
+    .limit(limit);
+  if (error || !data) return [];
+  return data.map((d) => d.tracking_number as string);
+}
+
+/** Linearly interpolate a midpoint along the route. */
+export function interpolate(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number },
+  t: number,
+) {
+  return {
+    lat: a.lat + (b.lat - a.lat) * t,
+    lng: a.lng + (b.lng - a.lng) * t,
+  };
+}
+
+export function formatShippedDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
+
+export function formatEta(minutes: number): string {
+  if (minutes <= 0) return "Arrived";
+  if (minutes < 60) return `${Math.round(minutes)} min`;
+  const h = Math.floor(minutes / 60);
+  const m = Math.round(minutes % 60);
+  if (h < 24) return `${h}h ${m}m`;
+  const d = Math.floor(h / 24);
+  const rh = h % 24;
+  return `${d}d ${rh}h`;
+}
