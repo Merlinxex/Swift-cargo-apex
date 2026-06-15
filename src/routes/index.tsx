@@ -231,23 +231,104 @@ function Index() {
         </div>
       </section>
 
-      {/* Photo gallery strip */}
+      {/* Photo gallery — Sea & Port */}
       <section className="border-t border-border bg-secondary/40">
-        <div className="container mx-auto max-w-6xl px-4 py-14">
-          <h2 className="text-2xl font-extrabold tracking-tight mb-6">Our operations in action</h2>
+        <div className="container mx-auto max-w-6xl px-4 pt-14 pb-6">
+          <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
+            Ocean freight
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Sea & Port operations</h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              { src: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop", alt: "Container ship at port" },
+              { src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop", alt: "Cargo containers stacked at terminal" },
+              { src: "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80&auto=format&fit=crop", alt: "Port cranes loading containers" },
+              { src: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80&auto=format&fit=crop", alt: "Aerial view of shipping port" },
+              { src: "https://images.unsplash.com/photo-1577993516781-29d13d3aeebd?w=600&q=80&auto=format&fit=crop", alt: "Freight ship on open ocean" },
+              { src: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&q=80&auto=format&fit=crop", alt: "Shipping containers colorful rows" },
+              { src: "https://images.unsplash.com/photo-1545987796-200677ee1011?w=600&q=80&auto=format&fit=crop", alt: "Port at night with lights" },
+              { src: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600&q=80&auto=format&fit=crop", alt: "Dock workers inspecting cargo" },
+            ].map(({ src, alt }) => (
+              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
+                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo gallery — Air Freight */}
+      <section className="border-t border-border bg-background">
+        <div className="container mx-auto max-w-6xl px-4 py-6">
+          <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
+            Air freight
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Air cargo & express</h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              { src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&auto=format&fit=crop", alt: "Air cargo loading on tarmac" },
+              { src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop", alt: "Cargo plane flying over clouds" },
+              { src: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?w=600&q=80&auto=format&fit=crop", alt: "Airport freight terminal at night" },
+              { src: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=600&q=80&auto=format&fit=crop", alt: "Cargo aircraft on runway" },
+              { src: "https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=600&q=80&auto=format&fit=crop", alt: "Air freight pallets being loaded" },
+              { src: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=600&q=80&auto=format&fit=crop", alt: "Plane taking off with cargo" },
+              { src: "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600&q=80&auto=format&fit=crop", alt: "Aerial cargo sorting facility" },
+              { src: "https://images.unsplash.com/photo-1609709295948-17d77cb2a69b?w=600&q=80&auto=format&fit=crop", alt: "Express courier packages ready for dispatch" },
+            ].map(({ src, alt }) => (
+              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
+                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo gallery — Road & Warehouse */}
+      <section className="border-t border-border bg-secondary/40">
+        <div className="container mx-auto max-w-6xl px-4 py-6">
+          <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
+            Ground logistics
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Road freight & warehousing</h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             {[
               { src: "https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=600&q=80&auto=format&fit=crop", alt: "Freight trucks lined up at depot" },
-              { src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&auto=format&fit=crop", alt: "Air cargo loading on tarmac" },
               { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&auto=format&fit=crop", alt: "Warehouse interior with pallets" },
-              { src: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop", alt: "Container ship at port" },
+              { src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80&auto=format&fit=crop", alt: "Semi truck on highway at sunset" },
+              { src: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop", alt: "Forklift in distribution center" },
+              { src: "https://images.unsplash.com/photo-1515191107209-c28698631303?w=600&q=80&auto=format&fit=crop", alt: "Logistics worker scanning packages" },
+              { src: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=80&auto=format&fit=crop", alt: "Truck convoy on open road" },
+              { src: "https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?w=600&q=80&auto=format&fit=crop", alt: "Warehouse shelves with boxes" },
+              { src: "https://images.unsplash.com/photo-1530493161843-42e0db6b40c3?w=600&q=80&auto=format&fit=crop", alt: "Delivery van in city street" },
             ].map(({ src, alt }) => (
               <div key={alt} className="overflow-hidden rounded-xl aspect-square">
-                <img
-                  src={src}
-                  alt={alt}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                />
+                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo gallery — Global & Team */}
+      <section className="border-t border-border bg-background">
+        <div className="container mx-auto max-w-6xl px-4 py-6 pb-14">
+          <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
+            Global reach
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Worldwide network & team</h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              { src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80&auto=format&fit=crop", alt: "Logistics team in meeting" },
+              { src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80&auto=format&fit=crop", alt: "Operations manager at desk" },
+              { src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop", alt: "Shipment tracking dashboard" },
+              { src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80&auto=format&fit=crop", alt: "Technology in logistics" },
+              { src: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&q=80&auto=format&fit=crop", alt: "Customer service logistics team" },
+              { src: "https://images.unsplash.com/photo-1526628953301-3cd9d647e614?w=600&q=80&auto=format&fit=crop", alt: "Global supply chain map" },
+              { src: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80&auto=format&fit=crop", alt: "Customs clearance documents" },
+              { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&auto=format&fit=crop", alt: "Freight agent inspecting shipment" },
+            ].map(({ src, alt }) => (
+              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
+                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
               </div>
             ))}
           </div>
