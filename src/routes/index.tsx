@@ -385,44 +385,41 @@ function Index() {
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>Specialist shipping</span>
           <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Pets, vehicles & oversized cargo</h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
-            <div className="overflow-hidden rounded-xl" style={{ height: 260 }}>
+          {/* Row 1 — 1 wide + 2 squares */}
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: 280 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=700&q=80&auto=format&fit=crop"
-                alt="Dog secured in a travel crate ready for pet cargo shipment" />
+                src="https://images.unsplash.com/photo-1632236519667-29b4b78da232?w=900&q=80&auto=format&fit=crop"
+                alt="Brown and white dog inside a travel shipping crate" />
             </div>
-            <div className="overflow-hidden rounded-xl" style={{ height: 260 }}>
+            <div className="overflow-hidden rounded-xl" style={{ height: 280 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700&q=80&auto=format&fit=crop"
-                alt="Pet travel carrier crate used for animal shipping" />
-            </div>
-            <div className="overflow-hidden rounded-xl" style={{ height: 260 }}>
-              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80&auto=format&fit=crop"
-                alt="Car transporter trailer loaded with vehicles on highway" />
+                src="https://images.unsplash.com/photo-1618307987981-6ac298102409?w=600&q=80&auto=format&fit=crop"
+                alt="Short-coated dog secured inside a shipping cage" />
             </div>
           </div>
 
+          {/* Row 2 — 4 squares */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop"
-                alt="Shipping containers stacked at a sea port terminal" />
+                src="https://images.unsplash.com/photo-1618307987789-79e5930f902e?w=600&q=80&auto=format&fit=crop"
+                alt="Dog lying inside a metal travel crate" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop"
-                alt="Large container cargo ship at a sea port" />
+                src="https://images.unsplash.com/photo-1772551571018-234b42d1da78?w=600&q=80&auto=format&fit=crop"
+                alt="French bulldog inside a transport crate ready for shipping" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop"
-                alt="Cargo aircraft flying over clouds" />
+                src="https://images.unsplash.com/photo-1772551766421-07f8644aaa69?w=600&q=80&auto=format&fit=crop"
+                alt="White French bulldog sitting in a shipping cage" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=600&q=80&auto=format&fit=crop"
-                alt="Cargo plane on runway ready for dispatch" />
+                src="https://images.unsplash.com/photo-1764813824215-4afa03d1a011?w=600&q=80&auto=format&fit=crop"
+                alt="Dog standing in a travel cage ready for transport" />
             </div>
           </div>
         </div>
