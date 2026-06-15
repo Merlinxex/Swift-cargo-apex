@@ -231,106 +231,174 @@ function Index() {
         </div>
       </section>
 
-      {/* Photo gallery — Sea & Port */}
+      {/* ── Gallery 1: Packages & Delivery ── */}
       <section className="border-t border-border bg-secondary/40">
-        <div className="container mx-auto max-w-6xl px-4 pt-14 pb-6">
+        <div className="container mx-auto max-w-6xl px-4 pt-14 pb-8">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
-            Ocean freight
+            Packages & delivery
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Sea & Port operations</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Door-to-door delivery</h2>
+
+          {/* Row 1: 1 wide + 2 square */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+            <div className="col-span-2 md:col-span-1 overflow-hidden rounded-xl" style={{ height: "280px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=800&q=80&auto=format&fit=crop"
+                alt="Courier delivering parcels at front door" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "280px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1591769225440-811ad7d6eab3?w=600&q=80&auto=format&fit=crop"
+                alt="Stack of cardboard shipping boxes ready for dispatch" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "280px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop"
+                alt="Delivery man scanning barcode on package" />
+            </div>
+          </div>
+
+          {/* Row 2: 4 squares */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { src: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop", alt: "Container ship at port" },
-              { src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop", alt: "Cargo containers stacked at terminal" },
-              { src: "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80&auto=format&fit=crop", alt: "Port cranes loading containers" },
-              { src: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80&auto=format&fit=crop", alt: "Aerial view of shipping port" },
-              { src: "https://images.unsplash.com/photo-1577993516781-29d13d3aeebd?w=600&q=80&auto=format&fit=crop", alt: "Freight ship on open ocean" },
-              { src: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&q=80&auto=format&fit=crop", alt: "Shipping containers colorful rows" },
-              { src: "https://images.unsplash.com/photo-1545987796-200677ee1011?w=600&q=80&auto=format&fit=crop", alt: "Port at night with lights" },
-              { src: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600&q=80&auto=format&fit=crop", alt: "Dock workers inspecting cargo" },
+              { src: "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=600&q=80&auto=format&fit=crop", alt: "Worker packing box for shipment" },
+              { src: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80&auto=format&fit=crop", alt: "Online shopping packages piled up for delivery" },
+              { src: "https://images.unsplash.com/photo-1612103198005-b238154832cc?w=600&q=80&auto=format&fit=crop", alt: "Smiling courier holding package at doorstep" },
+              { src: "https://images.unsplash.com/photo-1610484826917-0f101a7bf7f4?w=600&q=80&auto=format&fit=crop", alt: "Parcels loaded in delivery van ready to ship" },
             ].map(({ src, alt }) => (
               <div key={alt} className="overflow-hidden rounded-xl aspect-square">
-                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                <img loading="lazy" src={src} alt={alt} className="h-full w-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Photo gallery — Air Freight */}
+      {/* ── Gallery 2: Pet & Specialist Cargo ── */}
       <section className="border-t border-border bg-background">
-        <div className="container mx-auto max-w-6xl px-4 py-6">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
-            Air freight
+            Specialist cargo
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Air cargo & express</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {[
-              { src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&auto=format&fit=crop", alt: "Air cargo loading on tarmac" },
-              { src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop", alt: "Cargo plane flying over clouds" },
-              { src: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?w=600&q=80&auto=format&fit=crop", alt: "Airport freight terminal at night" },
-              { src: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=600&q=80&auto=format&fit=crop", alt: "Cargo aircraft on runway" },
-              { src: "https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=600&q=80&auto=format&fit=crop", alt: "Air freight pallets being loaded" },
-              { src: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=600&q=80&auto=format&fit=crop", alt: "Plane taking off with cargo" },
-              { src: "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600&q=80&auto=format&fit=crop", alt: "Aerial cargo sorting facility" },
-              { src: "https://images.unsplash.com/photo-1609709295948-17d77cb2a69b?w=600&q=80&auto=format&fit=crop", alt: "Express courier packages ready for dispatch" },
-            ].map(({ src, alt }) => (
-              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
-                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
-              </div>
-            ))}
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Pets, vehicles & oversized freight</h2>
+
+          {/* Row: 2 wide side by side + 1 tall on right */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+            <div className="overflow-hidden rounded-xl" style={{ height: "260px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=700&q=80&auto=format&fit=crop"
+                alt="Dog in approved airline pet travel crate ready for transport" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "260px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700&q=80&auto=format&fit=crop"
+                alt="Pet carrier crate secured for shipping" />
+            </div>
+            <div className="col-span-2 md:col-span-1 overflow-hidden rounded-xl" style={{ height: "260px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=700&q=80&auto=format&fit=crop"
+                alt="Cars loaded on multi-level vehicle transporter on highway" />
+            </div>
+          </div>
+
+          {/* Row 2: 3 equal */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="overflow-hidden rounded-xl" style={{ height: "240px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=700&q=80&auto=format&fit=crop"
+                alt="Car being loaded onto transport carrier trailer" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "240px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?w=700&q=80&auto=format&fit=crop"
+                alt="Vehicle wrapped for safe freight transportation" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "240px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=700&q=80&auto=format&fit=crop"
+                alt="Oversized cargo secured on flatbed truck at night" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Photo gallery — Road & Warehouse */}
+      {/* ── Gallery 3: Air & Sea Freight ── */}
       <section className="border-t border-border bg-secondary/40">
-        <div className="container mx-auto max-w-6xl px-4 py-6">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
-            Ground logistics
+            Air & sea freight
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Road freight & warehousing</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Global air & ocean shipping</h2>
+
+          {/* Masonry-style: big center + flanks */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+            <div className="overflow-hidden rounded-xl aspect-square">
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop"
+                alt="Cargo aircraft in flight over clouds" />
+            </div>
+            <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: "240px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=900&q=80&auto=format&fit=crop"
+                alt="Air freight pallets loaded on airport tarmac" />
+            </div>
+            <div className="overflow-hidden rounded-xl aspect-square">
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop"
+                alt="Cargo container ship at sea port" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { src: "https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=600&q=80&auto=format&fit=crop", alt: "Freight trucks lined up at depot" },
-              { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&auto=format&fit=crop", alt: "Warehouse interior with pallets" },
-              { src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80&auto=format&fit=crop", alt: "Semi truck on highway at sunset" },
-              { src: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop", alt: "Forklift in distribution center" },
-              { src: "https://images.unsplash.com/photo-1515191107209-c28698631303?w=600&q=80&auto=format&fit=crop", alt: "Logistics worker scanning packages" },
-              { src: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=80&auto=format&fit=crop", alt: "Truck convoy on open road" },
-              { src: "https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?w=600&q=80&auto=format&fit=crop", alt: "Warehouse shelves with boxes" },
-              { src: "https://images.unsplash.com/photo-1530493161843-42e0db6b40c3?w=600&q=80&auto=format&fit=crop", alt: "Delivery van in city street" },
+              { src: "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80&auto=format&fit=crop", alt: "Port cranes loading containers onto vessel" },
+              { src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop", alt: "Stacked colourful shipping containers at terminal" },
+              { src: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=600&q=80&auto=format&fit=crop", alt: "Cargo plane on runway at dusk" },
+              { src: "https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=600&q=80&auto=format&fit=crop", alt: "Air freight ULD pallets staged on tarmac" },
             ].map(({ src, alt }) => (
               <div key={alt} className="overflow-hidden rounded-xl aspect-square">
-                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                <img loading="lazy" src={src} alt={alt} className="h-full w-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Photo gallery — Global & Team */}
+      {/* ── Gallery 4: Warehouse & Ground ── */}
       <section className="border-t border-border bg-background">
-        <div className="container mx-auto max-w-6xl px-4 py-6 pb-14">
+        <div className="container mx-auto max-w-6xl px-4 py-8 pb-16">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
-            Global reach
+            Warehouse & ground
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Worldwide network & team</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {[
-              { src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80&auto=format&fit=crop", alt: "Logistics team in meeting" },
-              { src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80&auto=format&fit=crop", alt: "Operations manager at desk" },
-              { src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop", alt: "Shipment tracking dashboard" },
-              { src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80&auto=format&fit=crop", alt: "Technology in logistics" },
-              { src: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&q=80&auto=format&fit=crop", alt: "Customer service logistics team" },
-              { src: "https://images.unsplash.com/photo-1526628953301-3cd9d647e614?w=600&q=80&auto=format&fit=crop", alt: "Global supply chain map" },
-              { src: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80&auto=format&fit=crop", alt: "Customs clearance documents" },
-              { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&auto=format&fit=crop", alt: "Freight agent inspecting shipment" },
-            ].map(({ src, alt }) => (
-              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
-                <img src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
-              </div>
-            ))}
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Storage, sorting & road transport</h2>
+
+          {/* Row 1: 1 tall left + 2 stacked right */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+            <div className="row-span-2 overflow-hidden rounded-xl" style={{ height: "370px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=700&q=80&auto=format&fit=crop"
+                alt="Large warehouse interior stacked with palletised goods" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "180px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop"
+                alt="Forklift moving pallet of boxes in distribution centre" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "180px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=600&q=80&auto=format&fit=crop"
+                alt="Fleet of freight trucks lined up at logistics depot" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "180px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80&auto=format&fit=crop"
+                alt="Semi truck driving on open highway at sunrise" />
+            </div>
+            <div className="overflow-hidden rounded-xl" style={{ height: "180px" }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=80&auto=format&fit=crop"
+                alt="Truck convoy transporting goods on highway" />
+            </div>
           </div>
         </div>
       </section>
