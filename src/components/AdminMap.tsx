@@ -13,7 +13,17 @@ export function AdminMap({ lat, lng, onChange }: Props) {
   const markerRef = useRef<L.Marker | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current) return;
+
+    // Destroy previous map instance if any
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+      markerRef.current = null;
+    }
+
+    const startLat = isNaN(lat) || lat === 0 ? 20 : lat;
+    const startLng = isNaN(lng) || lng === 0 ? 0 : lng;
 
     const map = L.map(containerRef.current, {
       zoomControl: true,
@@ -26,9 +36,6 @@ export function AdminMap({ lat, lng, onChange }: Props) {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    const startLat = isNaN(lat) ? 0 : lat;
-    const startLng = isNaN(lng) ? 0 : lng;
-
     const marker = L.marker([startLat, startLng], { draggable: true }).addTo(map);
     marker.bindPopup("Drag to update shipment position").openPopup();
     markerRef.current = marker;
@@ -38,22 +45,15 @@ export function AdminMap({ lat, lng, onChange }: Props) {
       onChange(parseFloat(pos.lat.toFixed(6)), parseFloat(pos.lng.toFixed(6)));
     });
 
-    map.setView([startLat, startLng], 4);
+    map.setView([startLat, startLng], 5);
 
     return () => {
       map.remove();
       mapRef.current = null;
       markerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Update marker when lat/lng change from outside
-  useEffect(() => {
-    if (markerRef.current && !isNaN(lat) && !isNaN(lng)) {
-      markerRef.current.setLatLng([lat, lng]);
-      mapRef.current?.setView([lat, lng]);
-    }
+  // Re-initialize when lat/lng change significantly (i.e. different shipment opened)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lat, lng]);
 
   return (
