@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/SiteHeader";
+import { AdminMap } from "@/components/AdminMap";
 import {
   Dialog,
   DialogContent,
@@ -332,6 +333,23 @@ function AdminPage() {
               onChange={(v) => setForm({ ...form, service: v })} />
             <Field label="Weight" value={form.weight}
               onChange={(v) => setForm({ ...form, weight: v })} />
+          </div>
+
+          <div className="mt-4">
+            <Label className="text-xs mb-2 block">Current Position — drag the marker to update</Label>
+            <AdminMap
+              lat={parseFloat(form.current_lat) || 0}
+              lng={parseFloat(form.current_lng) || 0}
+              onChange={(lat, lng) =>
+                setForm({ ...form, current_lat: String(lat), current_lng: String(lng) })
+              }
+            />
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <Field label="Current lat" value={form.current_lat}
+                onChange={(v) => setForm({ ...form, current_lat: v })} />
+              <Field label="Current lng" value={form.current_lng}
+                onChange={(v) => setForm({ ...form, current_lng: v })} />
+            </div>
           </div>
 
           <DialogFooter>
