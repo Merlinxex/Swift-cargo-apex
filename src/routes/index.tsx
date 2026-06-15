@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, MapPin, Clock, ShieldCheck, Truck, Globe2, PackageSearch } from "lucide-react";
+import { ArrowRight, MapPin, Clock, ShieldCheck, Truck, Globe2, PackageSearch, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -50,6 +50,13 @@ function Index() {
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
+        {/* Hero background image */}
+        <img
+          src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=80&auto=format&fit=crop"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20"
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
@@ -172,6 +179,78 @@ function Index() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="container mx-auto max-w-6xl px-4 py-20">
+        <div className="grid gap-10 md:grid-cols-2 items-center">
+          <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: "var(--shadow-elegant)" }}>
+            <img
+              src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=900&q=80&auto=format&fit=crop"
+              alt="Logistics warehouse operations"
+              className="w-full h-80 object-cover"
+            />
+            <div
+              className="absolute bottom-0 left-0 right-0 p-5 text-white"
+              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)" }}
+            >
+              <div className="text-2xl font-extrabold">18,000+</div>
+              <div className="text-sm opacity-80">Shipments coordinated every month</div>
+            </div>
+          </div>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
+              Why choose us
+            </span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+              Your trusted global logistics partner.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              From single pallets to full loads, Swift Cargo delivers seamless freight solutions
+              with the technology and team to back it up.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                "Fast, secure & reliable delivery",
+                "Global coverage, local expertise",
+                "Real-time tracking & live updates",
+                "Customs clearance & documentation",
+                "24/7 operations support",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-sm font-medium">
+                  <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: "var(--accent)" }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Button asChild className="mt-7 font-semibold text-accent-foreground" style={{ background: "var(--gradient-accent)" }}>
+              <Link to="/contact">Contact our team <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Photo gallery strip */}
+      <section className="border-t border-border bg-secondary/40">
+        <div className="container mx-auto max-w-6xl px-4 py-14">
+          <h2 className="text-2xl font-extrabold tracking-tight mb-6">Our operations in action</h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              { src: "https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=600&q=80&auto=format&fit=crop", alt: "Freight trucks lined up at depot" },
+              { src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&auto=format&fit=crop", alt: "Air cargo loading on tarmac" },
+              { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&auto=format&fit=crop", alt: "Warehouse interior with pallets" },
+              { src: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?w=600&q=80&auto=format&fit=crop", alt: "Container ship at port" },
+            ].map(({ src, alt }) => (
+              <div key={alt} className="overflow-hidden rounded-xl aspect-square">
+                <img
+                  src={src}
+                  alt={alt}
+                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

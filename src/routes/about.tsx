@@ -57,6 +57,12 @@ function AboutPage() {
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
+        <img
+          src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1600&q=80&auto=format&fit=crop"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15"
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
@@ -125,28 +131,38 @@ function AboutPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              { icon: Truck, title: "Modern fleet", text: "Late-model EURO-6 trucks and refrigerated units." },
-              { icon: Globe2, title: "Global reach", text: "Air & ocean partners in 120+ countries." },
-              { icon: Users, title: "Dedicated team", text: "Named account manager on every contract." },
-              { icon: Award, title: "Certified", text: "ISO 9001 & 14001, AEO accredited." },
-            ].map(({ icon: Icon, title, text }) => (
-              <div
-                key={title}
-                className="rounded-2xl border border-border bg-card p-5"
-                style={{ boxShadow: "var(--shadow-elegant)" }}
-              >
+          <div className="space-y-4">
+            {/* Story photo */}
+            <div className="relative overflow-hidden rounded-2xl" style={{ boxShadow: "var(--shadow-elegant)" }}>
+              <img
+                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop"
+                alt="Swift Cargo operations team at work"
+                className="h-52 w-full object-cover"
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                { icon: Truck, title: "Modern fleet", text: "Late-model EURO-6 trucks and refrigerated units." },
+                { icon: Globe2, title: "Global reach", text: "Air & ocean partners in 120+ countries." },
+                { icon: Users, title: "Dedicated team", text: "Named account manager on every contract." },
+                { icon: Award, title: "Certified", text: "ISO 9001 & 14001, AEO accredited." },
+              ].map(({ icon: Icon, title, text }) => (
                 <div
-                  className="mb-3 grid h-10 w-10 place-items-center rounded-lg"
-                  style={{ background: "var(--gradient-accent)" }}
+                  key={title}
+                  className="rounded-2xl border border-border bg-card p-5"
+                  style={{ boxShadow: "var(--shadow-elegant)" }}
                 >
-                  <Icon className="h-5 w-5 text-accent-foreground" />
+                  <div
+                    className="mb-3 grid h-10 w-10 place-items-center rounded-lg"
+                    style={{ background: "var(--gradient-accent)" }}
+                  >
+                    <Icon className="h-5 w-5 text-accent-foreground" />
+                  </div>
+                  <div className="font-bold">{title}</div>
+                  <p className="mt-1 text-sm text-muted-foreground">{text}</p>
                 </div>
-                <div className="font-bold">{title}</div>
-                <p className="mt-1 text-sm text-muted-foreground">{text}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -164,6 +180,22 @@ function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Full-width photo banner */}
+      <section className="relative h-64 overflow-hidden md:h-80">
+        <img
+          src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1600&q=80&auto=format&fit=crop"
+          alt="Port logistics operations at night"
+          className="h-full w-full object-cover"
+        />
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="text-4xl font-extrabold md:text-5xl">320 professionals.</div>
+          <div className="mt-2 text-lg opacity-80">Moving freight across 120+ countries, every day.</div>
         </div>
       </section>
 
