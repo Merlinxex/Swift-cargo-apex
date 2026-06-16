@@ -50,9 +50,9 @@ function Index() {
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
-        {/* Hero background image */}
+        {/* Hero background image — car transporter on highway */}
         <img
-          src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=80&auto=format&fit=crop"
+          src="/images/1000168247.jpg"
           alt=""
           aria-hidden
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20"
@@ -186,9 +186,10 @@ function Index() {
       <section className="container mx-auto max-w-6xl px-4 py-20">
         <div className="grid gap-10 md:grid-cols-2 items-center">
           <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: "var(--shadow-elegant)" }}>
+            {/* Warehouse team checking manifest */}
             <img
-              src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=900&q=80&auto=format&fit=crop"
-              alt="Logistics warehouse operations"
+              src="/images/1000168255.jpg"
+              alt="Warehouse logistics team checking shipment manifest"
               className="w-full h-80 object-cover"
             />
             <div
@@ -239,39 +240,45 @@ function Index() {
 
           {/* Row 1 — 1 wide banner + 2 squares */}
           <div className="grid grid-cols-3 gap-3 mb-3">
+            {/* Delivery courier unloading van — wide */}
             <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: 260 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=900&q=80&auto=format&fit=crop"
-                alt="Brown cardboard boxes stacked on a black plastic shipping crate" />
+                src="/images/1000168226.jpg"
+                alt="Courier in blue uniform unloading cardboard boxes from a white delivery van" />
             </div>
+            {/* Warehouse manager with tablet */}
             <div className="overflow-hidden rounded-xl" style={{ height: 260 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1620455800201-7f00aeef12ed?w=600&q=80&auto=format&fit=crop"
-                alt="Stack of brown cardboard shipping boxes" />
+                src="/images/1000168222.jpg"
+                alt="Warehouse manager checking shipment inventory on a tablet" />
             </div>
           </div>
 
           {/* Row 2 — 4 squares */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {/* Delivery van courier (alternate angle) */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80&auto=format&fit=crop"
-                alt="Person handing over a brown shipping box" />
+                src="/images/1000168212.jpg"
+                alt="Delivery driver unloading parcels from a white cargo van at a residential address" />
             </div>
+            {/* Forklift loading truck */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1614018453562-77f6180ce036?w=600&q=80&auto=format&fit=crop"
-                alt="Brown cardboard parcel left beside a white door" />
+                src="/images/1000168221.jpg"
+                alt="Yellow forklift loading palletised boxes into a freight truck" />
             </div>
+            {/* Warehouse workers with clipboard */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1638501478003-4e9761dcfe22?w=600&q=80&auto=format&fit=crop"
-                alt="Delivered cardboard box sitting in front of a door" />
+                src="/images/1000168255.jpg"
+                alt="Two warehouse staff in hard hats reviewing a shipment manifest" />
             </div>
+            {/* Produce crate with trucks in background */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1609143739217-01b60dad1c67?w=600&q=80&auto=format&fit=crop"
-                alt="Brown cardboard boxes placed on white floor tiles" />
+                src="/images/1000168254.jpg"
+                alt="Fresh produce in a wooden crate with refrigerated freight trucks in the background" />
             </div>
           </div>
         </div>
@@ -285,34 +292,39 @@ function Index() {
 
           {/* Row 1 — 3 equal tall */}
           <div className="grid grid-cols-3 gap-3 mb-3">
+            {/* Courier unloading van (main hero image) */}
             <div className="overflow-hidden rounded-xl" style={{ height: 300 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1582902281043-69c645f40cd5?w=600&q=80&auto=format&fit=crop"
-                alt="Male courier in green jacket standing outside with parcel" />
+                src="/images/1000168226.jpg"
+                alt="Courier in blue uniform lifting boxes from the back of a white delivery van" />
             </div>
+            {/* Second courier van shot */}
             <div className="overflow-hidden rounded-xl" style={{ height: 300 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1543499459-d1460946bdc6?w=600&q=80&auto=format&fit=crop"
-                alt="Man carrying multiple cardboard boxes during delivery" />
+                src="/images/1000168212.jpg"
+                alt="Delivery driver unloading packages from cargo van at a suburban home" />
             </div>
+            {/* Electric delivery truck */}
             <div className="overflow-hidden rounded-xl" style={{ height: 300 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1607227063002-677dc5fdf96f?w=600&q=80&auto=format&fit=crop"
-                alt="Delivery man in green shirt holding a brown cardboard box" />
+                src="/images/1000168237.jpg"
+                alt="Modern electric delivery truck parked at a charging station" />
             </div>
           </div>
 
           {/* Row 2 — 2 wide + 1 */}
           <div className="grid grid-cols-3 gap-3">
+            {/* Warehouse tablet manager — wide */}
             <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: 240 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1638045420324-e431122074c2?w=900&q=80&auto=format&fit=crop"
-                alt="Courier carrying a box while walking on a city street" />
+                src="/images/1000168222.jpg"
+                alt="Logistics manager scanning parcels with a tablet inside a fulfilment centre" />
             </div>
+            {/* Forklift */}
             <div className="overflow-hidden rounded-xl" style={{ height: 240 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1449247666642-264389f5f5b1?w=600&q=80&auto=format&fit=crop"
-                alt="Person holding an open cardboard shipping box on a table" />
+                src="/images/1000168221.jpg"
+                alt="Forklift operator loading freight into a truck at a distribution depot" />
             </div>
           </div>
         </div>
@@ -328,98 +340,125 @@ function Index() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1600186755589-84242bd8368f?w=600&q=80&auto=format&fit=crop"
-                alt="Brown cardboard boxes arranged on grey metal warehouse racks" />
+                src="/images/1000168255.jpg"
+                alt="Warehouse workers in safety vests and hard hats processing an inbound shipment" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1633174524827-db00a6b7bc74?w=600&q=80&auto=format&fit=crop"
-                alt="Two Amazon shipping boxes stacked on top of each other" />
+                src="/images/1000168222.jpg"
+                alt="Warehouse operative scanning a parcel with a digital tablet" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1605732562742-3023a888e56e?w=600&q=80&auto=format&fit=crop"
-                alt="Pet shipping crates and cargo boxes staged on airport tarmac" />
+                src="/images/1000168221.jpg"
+                alt="Forklift loading pallets of boxed goods onto a freight truck" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1716718810773-d2a52b43602f?w=600&q=80&auto=format&fit=crop"
-                alt="Lufthansa Cargo Boeing 777F parked on airport tarmac" />
+                src="/images/1000168237.jpg"
+                alt="Electric delivery truck at a green energy charging hub" />
             </div>
           </div>
 
           {/* Row 2 — 1 tall left + 2 stacked right */}
           <div className="grid grid-cols-3 gap-3">
+            {/* Air freight loading — tall left */}
             <div className="row-span-2 overflow-hidden rounded-xl" style={{ height: 380 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&auto=format&fit=crop"
-                alt="Large warehouse interior fully stocked with pallet goods" />
+                src="/images/1000168215.jpg"
+                alt="Air freight cargo containers being loaded onto a wide-body aircraft" />
             </div>
+            {/* Pet crates being prepped for air freight */}
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop"
-                alt="Forklift moving palletised boxes in a distribution centre" />
+                src="/images/1000168234.jpg"
+                alt="Ground crew in orange vests preparing animal crates for air cargo loading" />
             </div>
+            {/* Produce with trucks */}
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80&auto=format&fit=crop"
-                alt="Semi truck loaded with cargo driving on open highway" />
+                src="/images/1000168254.jpg"
+                alt="Fresh produce crate staged in front of refrigerated cargo trucks" />
             </div>
+            {/* Courier van */}
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&auto=format&fit=crop"
-                alt="Air freight pallets being loaded onto cargo aircraft" />
+                src="/images/1000168226.jpg"
+                alt="Courier unloading last-mile delivery parcels from a white van" />
             </div>
+            {/* Warehouse staff */}
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1742940796395-b2a614941353?w=600&q=80&auto=format&fit=crop"
-                alt="Modern car transporter truck driving along highway" />
+                src="/images/1000168255.jpg"
+                alt="Logistics team reviewing dispatch orders inside a sorting warehouse" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── GALLERY 4: Specialist — Pet crates & Vehicles ── */}
+      {/* ── GALLERY 4: Specialist — Vehicles, Pets & Livestock ── */}
       <section className="border-t border-border bg-background">
         <div className="container mx-auto max-w-6xl px-4 py-8 pb-16">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>Specialist shipping</span>
-          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Pets, vehicles & oversized cargo</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight mt-1 mb-6">Vehicles, pets, livestock & oversized cargo</h2>
 
           {/* Row 1 — 1 wide + 2 squares */}
           <div className="grid grid-cols-3 gap-3 mb-3">
+            {/* Multi-level car transporter on highway — wide hero */}
             <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: 280 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1632236519667-29b4b78da232?w=900&q=80&auto=format&fit=crop"
-                alt="Brown and white dog inside a travel shipping crate" />
+                src="/images/1000168247.jpg"
+                alt="Multi-level car transporter truck carrying SUVs on a motorway" />
             </div>
+            {/* Car carrier loading yard */}
             <div className="overflow-hidden rounded-xl" style={{ height: 280 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1618307987981-6ac298102409?w=600&q=80&auto=format&fit=crop"
-                alt="Short-coated dog secured inside a shipping cage" />
+                src="/images/1000168213.jpg"
+                alt="Red convertible and hatchback being loaded onto a car transport trailer" />
             </div>
           </div>
 
           {/* Row 2 — 4 squares */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+            {/* Cars in shipping container + wrapped motorcycle */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1618307987789-79e5930f902e?w=600&q=80&auto=format&fit=crop"
-                alt="Dog lying inside a metal travel crate" />
+                src="/images/1000168227.jpg"
+                alt="Saloon cars loaded two-high inside a shipping container, with a wrapped motorcycle alongside" />
             </div>
+            {/* Horse being loaded onto aircraft */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1772551571018-234b42d1da78?w=600&q=80&auto=format&fit=crop"
-                alt="French bulldog inside a transport crate ready for shipping" />
+                src="/images/1000168235.jpg"
+                alt="Handlers guiding a racehorse up a ramp into a small cargo aircraft" />
             </div>
+            {/* Pet crate at airport check-in */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1772551766421-07f8644aaa69?w=600&q=80&auto=format&fit=crop"
-                alt="White French bulldog sitting in a shipping cage" />
+                src="/images/1000168260.jpg"
+                alt="Pet travel crate on a trolley at an international airport check-in counter" />
             </div>
+            {/* Orange animal crates staged for air freight */}
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1764813824215-4afa03d1a011?w=600&q=80&auto=format&fit=crop"
-                alt="Dog standing in a travel cage ready for transport" />
+                src="/images/1000168234.jpg"
+                alt="Rows of orange animal shipping crates being prepared for air cargo loading" />
+            </div>
+          </div>
+
+          {/* Row 3 — livestock + car transporter yard */}
+          <div className="grid grid-cols-3 gap-3">
+            {/* Livestock truck — wide */}
+            <div className="col-span-2 overflow-hidden rounded-xl" style={{ height: 240 }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="/images/1000168261.jpg"
+                alt="Multi-deck livestock truck transporting pigs on an open highway" />
+            </div>
+            {/* Air freight cargo loading */}
+            <div className="overflow-hidden rounded-xl" style={{ height: 240 }}>
+              <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                src="/images/1000168215.jpg"
+                alt="ULD cargo pallets being loaded into the belly of a passenger aircraft" />
             </div>
           </div>
         </div>
