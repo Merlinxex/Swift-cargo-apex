@@ -8,6 +8,20 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
+const BASE = "https://ytsvvygxulgnttebhoqr.supabase.co/storage/v1/object/public/images";
+
+const IMG = {
+  heroBanner:  `${BASE}/beaconshippinglogistics-seotool-76213-reasonstoconsider-blogbanner1-768x461.jpeg`,
+  formSide:    `${BASE}/Depositphotos_69011833_original_guy_with_tablet_1200x800_2_300x200.jpeg`,
+  hamburg:     `${BASE}/shutterstock_1465221002.jpg.jpeg`,
+  rotterdam:   `${BASE}/v2-pmrj1-1mp6q-r10h3bfdipnhdbfpvaueyafabdhxwpfby3yrv1i7hs-1024x512.jpeg`,
+  madrid:      `${BASE}/maersk-airfreight_1024x576.webp`,
+  strip1:      `${BASE}/shell_truck_charge_web-1024x683-1.jpeg`,
+  strip2:      `${BASE}/s-road-transport-1.jpg.jpeg`,
+  strip3:      `${BASE}/82465d143598b9466fc3c7dfbdf32868-1-300x175-1.jpg.jpeg`,
+  strip4:      `${BASE}/beaconshippinglogistics_seotool_76213_reasonstoconsider_blogbanner1.jpeg`,
+};
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
@@ -32,16 +46,19 @@ const OFFICES = [
     city: "Hamburg (HQ)",
     address: "Hafencity Allee 12, 20457 Hamburg, Germany",
     email: "swiftcargoapex@gmail.com",
+    image: IMG.hamburg,
   },
   {
     city: "Rotterdam",
     address: "Wilhelminakade 88, 3072 AR Rotterdam, Netherlands",
     email: "swiftcargoapex@gmail.com",
+    image: IMG.rotterdam,
   },
   {
     city: "Madrid",
     address: "Calle Serrano 41, 28001 Madrid, Spain",
     email: "swiftcargoapex@gmail.com",
+    image: IMG.madrid,
   },
 ];
 
@@ -51,7 +68,6 @@ function ContactPage() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
-    // Demo only — wire to a backend later.
     await new Promise((r) => setTimeout(r, 600));
     setSubmitting(false);
     (e.target as HTMLFormElement).reset();
@@ -62,11 +78,22 @@ function ContactPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      {/* Hero */}
+      {/* Hero with background image */}
       <section
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
+        <img
+          src={IMG.heroBanner}
+          alt="Swift Cargo logistics operations"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20"
+          loading="eager"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "linear-gradient(120deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2) 60%, transparent)" }}
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
@@ -125,66 +152,80 @@ function ContactPage() {
       </section>
 
       {/* Form + offices */}
-      <section className="container mx-auto max-w-6xl px-4 pb-20">
+      <section className="container mx-auto max-w-6xl px-4 pb-16">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
-          <form
-            onSubmit={onSubmit}
-            className="rounded-2xl border border-border bg-card p-6 md:p-8"
-            style={{ boxShadow: "var(--shadow-elegant)" }}
-          >
-            <h2 className="text-2xl font-extrabold tracking-tight">Send us a message</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Tell us about your shipment or request and we'll route you to the right team.
-            </p>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="name">Full name</Label>
-                <Input id="name" name="name" required className="mt-1.5" placeholder="Jane Doe" />
+          {/* Left: image above form */}
+          <div className="flex flex-col gap-6">
+            <figure className="overflow-hidden rounded-2xl border border-border" style={{ boxShadow: "var(--shadow-elegant)" }}>
+              <img
+                src={IMG.formSide}
+                alt="Swift Cargo customer support team"
+                className="aspect-[16/7] w-full object-cover"
+                loading="lazy"
+              />
+            </figure>
+
+            <form
+              onSubmit={onSubmit}
+              className="rounded-2xl border border-border bg-card p-6 md:p-8"
+              style={{ boxShadow: "var(--shadow-elegant)" }}
+            >
+              <h2 className="text-2xl font-extrabold tracking-tight">Send us a message</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Tell us about your shipment or request and we'll route you to the right team.
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="name">Full name</Label>
+                  <Input id="name" name="name" required className="mt-1.5" placeholder="Jane Doe" />
+                </div>
+                <div>
+                  <Label htmlFor="company">Company</Label>
+                  <Input id="company" name="company" className="mt-1.5" placeholder="Acme GmbH" />
+                </div>
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    className="mt-1.5"
+                    placeholder="jane@acme.com"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input id="phone" name="phone" className="mt-1.5" placeholder="+49 ..." />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="company">Company</Label>
-                <Input id="company" name="company" className="mt-1.5" placeholder="Acme GmbH" />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
+
+              <div className="mt-4">
+                <Label htmlFor="message">How can we help?</Label>
+                <Textarea
+                  id="message"
+                  name="message"
                   required
+                  rows={5}
                   className="mt-1.5"
-                  placeholder="jane@acme.com"
+                  placeholder="Describe your shipment, lane or question..."
                 />
               </div>
-              <div>
-                <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" className="mt-1.5" placeholder="+49 ..." />
-              </div>
-            </div>
 
-            <div className="mt-4">
-              <Label htmlFor="message">How can we help?</Label>
-              <Textarea
-                id="message"
-                name="message"
-                required
-                rows={5}
-                className="mt-1.5"
-                placeholder="Describe your shipment, lane or question..."
-              />
-            </div>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="mt-6 h-11 gap-2 font-semibold text-accent-foreground"
+                style={{ background: "var(--gradient-accent)" }}
+              >
+                {submitting ? "Sending..." : "Send message"} <Send className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
 
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="mt-6 h-11 gap-2 font-semibold text-accent-foreground"
-              style={{ background: "var(--gradient-accent)" }}
-            >
-              {submitting ? "Sending..." : "Send message"} <Send className="h-4 w-4" />
-            </Button>
-          </form>
-
+          {/* Right: HQ card + office cards with images */}
           <div className="space-y-4">
             <div
               className="rounded-2xl p-6 text-hero-foreground"
@@ -200,27 +241,52 @@ function ContactPage() {
             </div>
 
             {OFFICES.map((o) => (
-              <div key={o.city} className="rounded-2xl border border-border bg-card p-5">
-                <div className="flex items-start gap-3">
-                  <div
-                    className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
-                    style={{ background: "var(--secondary)" }}
-                  >
-                    <MapPin className="h-4 w-4" style={{ color: "var(--accent)" }} />
-                  </div>
-                  <div>
-                    <div className="font-bold">{o.city}</div>
-                    <div className="mt-1 text-sm text-muted-foreground">{o.address}</div>
-                    <a
-                      href={`mailto:${o.email}`}
-                      className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
-                      style={{ color: "var(--primary)" }}
+              <div key={o.city} className="overflow-hidden rounded-2xl border border-border bg-card" style={{ boxShadow: "var(--shadow-elegant)" }}>
+                <img
+                  src={o.image}
+                  alt={o.city}
+                  loading="lazy"
+                  className="aspect-[16/6] w-full object-cover"
+                />
+                <div className="p-5">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
+                      style={{ background: "var(--secondary)" }}
                     >
-                      <Mail className="h-3.5 w-3.5" /> {o.email}
-                    </a>
+                      <MapPin className="h-4 w-4" style={{ color: "var(--accent)" }} />
+                    </div>
+                    <div>
+                      <div className="font-bold">{o.city}</div>
+                      <div className="mt-1 text-sm text-muted-foreground">{o.address}</div>
+                      <a
+                        href={`mailto:${o.email}`}
+                        className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+                        style={{ color: "var(--primary)" }}
+                      >
+                        <Mail className="h-3.5 w-3.5" /> {o.email}
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Image strip */}
+      <section className="border-t border-border bg-secondary/40">
+        <div className="container mx-auto max-w-6xl px-4 py-12">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[IMG.strip1, IMG.strip2, IMG.strip3, IMG.strip4].map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`Swift Cargo operations ${i + 1}`}
+                loading="lazy"
+                className="aspect-square w-full rounded-xl object-cover"
+              />
             ))}
           </div>
         </div>
