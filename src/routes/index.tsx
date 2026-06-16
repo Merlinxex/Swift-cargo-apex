@@ -338,13 +338,13 @@ function Index() {
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1639678592362-b2bb42fa2725?w=600&q=80&auto=format&fit=crop"
-                alt="Car being towed on a flatbed trailer" />
+                src="https://images.unsplash.com/photo-1605732562742-3023a888e56e?w=600&q=80&auto=format&fit=crop"
+                alt="Pet shipping crates and cargo boxes staged on airport tarmac" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1698998882426-39a6609ab10a?w=600&q=80&auto=format&fit=crop"
-                alt="Truck being towed on a flatbed transport trailer" />
+                src="https://images.unsplash.com/photo-1716718810773-d2a52b43602f?w=600&q=80&auto=format&fit=crop"
+                alt="Lufthansa Cargo Boeing 777F parked on airport tarmac" />
             </div>
           </div>
 
@@ -372,8 +372,8 @@ function Index() {
             </div>
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1727170599582-34f23a85fd46?w=600&q=80&auto=format&fit=crop"
-                alt="Truck with trailer driving down a shipping road" />
+                src="https://images.unsplash.com/photo-1742940796395-b2a614941353?w=600&q=80&auto=format&fit=crop"
+                alt="Modern car transporter truck driving along highway" />
             </div>
           </div>
         </div>
