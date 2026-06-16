@@ -23,13 +23,13 @@ export const Route = createFileRoute("/track")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Track Shipment — Swift Cargo" },
+      { title: "Track Shipment — Swift Cargo Apex" },
       {
         name: "description",
         content:
           "Track a shipment by tracking number. View live location on an interactive map and estimated time of arrival.",
       },
-      { property: "og:title", content: "Track Shipment — Swift Cargo" },
+      { property: "og:title", content: "Track Shipment — Swift Cargo Apex" },
       {
         property: "og:description",
         content: "Live map and ETA for your shipment.",

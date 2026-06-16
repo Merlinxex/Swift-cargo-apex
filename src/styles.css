@@ -67,7 +67,7 @@
 
 :root {
   --radius: 0.5rem;
-  /* Swift Cargo — dark theme: deep midnight navy + amber accent */
+  /* Swift Cargo Apex — dark theme: deep midnight navy + amber accent */
   --background: oklch(0.16 0.025 260);
   --foreground: oklch(0.96 0.01 250);
   --card: oklch(0.21 0.03 262);

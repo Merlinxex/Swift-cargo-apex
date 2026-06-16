@@ -2,17 +2,20 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, Globe2, HeartHandshake, Leaf, Truck, Users } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
+import teamImg from "@/assets/gallery/team.jpg.asset.json";
+import supplyChain from "@/assets/gallery/supply-chain.jpg.asset.json";
+import airLoading from "@/assets/gallery/air-loading.jpg.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Swift Cargo" },
+      { title: "About — Swift Cargo Apex" },
       {
         name: "description",
         content:
-          "Swift Cargo is a European freight network delivering road, air and ocean shipments with live tracking and 24/7 operations support.",
+          "Swift Cargo Apex is a European freight network delivering road, air and ocean shipments with live tracking and 24/7 operations support.",
       },
-      { property: "og:title", content: "About Swift Cargo" },
+      { property: "og:title", content: "About Swift Cargo Apex" },
       {
         property: "og:description",
         content: "Who we are: a modern freight network built on transparency, technology and trust.",
@@ -57,12 +60,6 @@ function AboutPage() {
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
-        <img
-          src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1600&q=80&auto=format&fit=crop"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15"
-        />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
@@ -78,7 +75,7 @@ function AboutPage() {
             <span style={{ color: "var(--accent)" }}>one shipment at a time.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base text-hero-foreground/80 md:text-lg">
-            Swift Cargo is a European-born freight network combining a 4,000-strong driver
+            Swift Cargo Apex is a European-born freight network combining a 4,000-strong driver
             community with software that gives shippers real-time visibility from pickup to proof
             of delivery.
           </p>
@@ -129,40 +126,35 @@ function AboutPage() {
                 <Link to="/track" search={{ tn: "" }}>Track a shipment</Link>
               </Button>
             </div>
+            <div className="mt-8 grid grid-cols-2 gap-3">
+              <img src={teamImg.url} alt="Warehouse team coordinating a shipment" loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover" />
+              <img src={supplyChain.url} alt="Supply chain manager on the warehouse floor" loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover" />
+              <img src={airLoading.url} alt="Ground crew loading air freight" loading="lazy" className="col-span-2 aspect-[16/7] w-full rounded-xl object-cover" />
+            </div>
           </div>
 
-          <div className="space-y-4">
-            {/* Story photo */}
-            <div className="relative overflow-hidden rounded-2xl" style={{ boxShadow: "var(--shadow-elegant)" }}>
-              <img
-                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop"
-                alt="Swift Cargo operations team at work"
-                className="h-52 w-full object-cover"
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                { icon: Truck, title: "Modern fleet", text: "Late-model EURO-6 trucks and refrigerated units." },
-                { icon: Globe2, title: "Global reach", text: "Air & ocean partners in 120+ countries." },
-                { icon: Users, title: "Dedicated team", text: "Named account manager on every contract." },
-                { icon: Award, title: "Certified", text: "ISO 9001 & 14001, AEO accredited." },
-              ].map(({ icon: Icon, title, text }) => (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[
+              { icon: Truck, title: "Modern fleet", text: "Late-model EURO-6 trucks and refrigerated units." },
+              { icon: Globe2, title: "Global reach", text: "Air & ocean partners in 120+ countries." },
+              { icon: Users, title: "Dedicated team", text: "Named account manager on every contract." },
+              { icon: Award, title: "Certified", text: "ISO 9001 & 14001, AEO accredited." },
+            ].map(({ icon: Icon, title, text }) => (
+              <div
+                key={title}
+                className="rounded-2xl border border-border bg-card p-5"
+                style={{ boxShadow: "var(--shadow-elegant)" }}
+              >
                 <div
-                  key={title}
-                  className="rounded-2xl border border-border bg-card p-5"
-                  style={{ boxShadow: "var(--shadow-elegant)" }}
+                  className="mb-3 grid h-10 w-10 place-items-center rounded-lg"
+                  style={{ background: "var(--gradient-accent)" }}
                 >
-                  <div
-                    className="mb-3 grid h-10 w-10 place-items-center rounded-lg"
-                    style={{ background: "var(--gradient-accent)" }}
-                  >
-                    <Icon className="h-5 w-5 text-accent-foreground" />
-                  </div>
-                  <div className="font-bold">{title}</div>
-                  <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+                  <Icon className="h-5 w-5 text-accent-foreground" />
                 </div>
-              ))}
-            </div>
+                <div className="font-bold">{title}</div>
+                <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -183,24 +175,8 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Full-width photo banner */}
-      <section className="relative h-64 overflow-hidden md:h-80">
-        <img
-          src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1600&q=80&auto=format&fit=crop"
-          alt="Port logistics operations at night"
-          className="h-full w-full object-cover"
-        />
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4"
-          style={{ background: "rgba(0,0,0,0.5)" }}
-        >
-          <div className="text-4xl font-extrabold md:text-5xl">320 professionals.</div>
-          <div className="mt-2 text-lg opacity-80">Moving freight across 120+ countries, every day.</div>
-        </div>
-      </section>
-
       <footer className="container mx-auto max-w-6xl px-4 py-10 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Swift Cargo. Powered by OpenStreetMap.
+        © {new Date().getFullYear()} Swift Cargo Apex. Powered by OpenStreetMap.
       </footer>
     </div>
   );

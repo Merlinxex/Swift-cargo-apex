@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/SiteHeader";
-import { AdminMap } from "@/components/AdminMap";
+import { LocationPickerMap } from "@/components/LocationPickerMap";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +21,8 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Dashboard — Swift Cargo" },
-      { name: "description", content: "Manage shipments in the Swift Cargo admin dashboard." },
+      { title: "Admin Dashboard — Swift Cargo Apex" },
+      { name: "description", content: "Manage shipments in the Swift Cargo Apex admin dashboard." },
     ],
   }),
   component: AdminPage,
@@ -60,7 +60,7 @@ const blankForm: FormState = {
   current_lng: "",
   progress: "0",
   eta_minutes: "0",
-  carrier: "Swift Cargo",
+  carrier: "Swift Cargo Apex",
   weight: "",
   service: "",
 };
@@ -134,7 +134,7 @@ function AdminPage() {
       current_lng: form.current_lng ? parseFloat(form.current_lng) : null,
       progress: Math.max(0, Math.min(100, parseInt(form.progress || "0", 10))),
       eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)),
-      carrier: form.carrier.trim() || "Swift Cargo",
+      carrier: form.carrier.trim() || "Swift Cargo Apex",
       weight: form.weight.trim() || null,
       service: form.service.trim() || null,
     };
@@ -336,20 +336,45 @@ function AdminPage() {
           </div>
 
           <div className="mt-4">
-            <Label className="text-xs mb-2 block">Current Position — drag the marker to update</Label>
-            <AdminMap
-              lat={parseFloat(form.current_lat) || 0}
-              lng={parseFloat(form.current_lng) || 0}
-              onChange={(lat, lng) =>
-                setForm({ ...form, current_lat: String(lat), current_lng: String(lng) })
-              }
-            />
-            <div className="grid grid-cols-2 gap-2 mt-2">
+            <Label className="text-xs">Current location — click the map or drag the marker</Label>
+            <div className="mt-2">
+              <LocationPickerMap
+                value={
+                  form.current_lat && form.current_lng
+                    ? { lat: parseFloat(form.current_lat), lng: parseFloat(form.current_lng) }
+                    : null
+                }
+                onChange={(v) =>
+                  setForm((f) => ({
+                    ...f,
+                    current_lat: String(v.lat),
+                    current_lng: String(v.lng),
+                  }))
+                }
+                origin={
+                  form.origin_lat && form.origin_lng
+                    ? { lat: parseFloat(form.origin_lat), lng: parseFloat(form.origin_lng) }
+                    : null
+                }
+                destination={
+                  form.destination_lat && form.destination_lng
+                    ? {
+                        lat: parseFloat(form.destination_lat),
+                        lng: parseFloat(form.destination_lng),
+                      }
+                    : null
+                }
+              />
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2">
               <Field label="Current lat" value={form.current_lat}
                 onChange={(v) => setForm({ ...form, current_lat: v })} />
               <Field label="Current lng" value={form.current_lng}
                 onChange={(v) => setForm({ ...form, current_lng: v })} />
             </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Setting a current location fixes the shipment marker to this exact point on the tracking map.
+            </p>
           </div>
 
           <DialogFooter>

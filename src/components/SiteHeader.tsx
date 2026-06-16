@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { LogOut, Package, Shield, User } from "lucide-react";
+import { LogOut, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import logoAsset from "@/assets/swift-cargo-apex-logo.png.asset.json";
 
 export function SiteHeader() {
   const { user, isAdmin, signOut } = useAuth();
@@ -10,14 +11,13 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
-          <span
-            className="grid h-9 w-9 place-items-center rounded-md text-hero-foreground"
-            style={{ background: "var(--gradient-hero)" }}
-          >
-            <Package className="h-5 w-5" />
-          </span>
+          <img
+            src={logoAsset.url}
+            alt="Swift Cargo Apex logo"
+            className="h-9 w-9 rounded-md object-contain"
+          />
           <span className="text-lg">
-            Swift<span style={{ color: "var(--accent)" }}>Cargo</span>
+            Swift<span style={{ color: "var(--accent)" }}>Cargo</span> Apex
           </span>
         </Link>
         <nav className="flex items-center gap-1 text-sm font-medium">
@@ -60,7 +60,7 @@ export function SiteHeader() {
               <Shield className="h-3.5 w-3.5" /> Admin
             </Link>
           )}
-          {user ? (
+          {user && (
             <Button
               variant="ghost"
               size="sm"
@@ -71,15 +71,8 @@ export function SiteHeader() {
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Sign out</span>
             </Button>
-          ) : (
-            <Link
-              to="/auth"
-              className="ml-1 inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              <User className="h-3.5 w-3.5" />
-              <span>Sign in</span>
-            </Link>
           )}
+
         </nav>
       </div>
     </header>

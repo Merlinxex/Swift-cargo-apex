@@ -12,8 +12,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Swift Cargo Admin" },
-      { name: "description", content: "Sign in to the Swift Cargo admin dashboard." },
+      { title: "Sign in — Swift Cargo Apex Admin" },
+      { name: "description", content: "Sign in to the Swift Cargo Apex admin dashboard." },
     ],
   }),
   component: AuthPage,

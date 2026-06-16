@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Building2, Clock, Mail, MapPin, Send } from "lucide-react";
+import { Building2, Clock, Mail, MapPin, Phone, Send } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Swift Cargo" },
+      { title: "Contact — Swift Cargo Apex" },
       {
         name: "description",
         content:
-          "Get in touch with Swift Cargo. Email and office addresses for sales, support and 24/7 operations.",
+          "Get in touch with Swift Cargo Apex. Phone, email and office addresses for sales, support and 24/7 operations.",
       },
-      { property: "og:title", content: "Contact Swift Cargo" },
+      { property: "og:title", content: "Contact Swift Cargo Apex" },
       {
         property: "og:description",
         content: "Reach our sales, support and operations teams across Europe.",
@@ -31,17 +31,17 @@ const OFFICES = [
   {
     city: "Hamburg (HQ)",
     address: "Hafencity Allee 12, 20457 Hamburg, Germany",
-    email: "swiftcargoapex@gmail.com",
+    phone: "+49 40 5566 7788",
   },
   {
     city: "Rotterdam",
     address: "Wilhelminakade 88, 3072 AR Rotterdam, Netherlands",
-    email: "swiftcargoapex@gmail.com",
+    phone: "+31 10 223 4455",
   },
   {
     city: "Madrid",
     address: "Calle Serrano 41, 28001 Madrid, Spain",
-    email: "swiftcargoapex@gmail.com",
+    phone: "+34 91 234 5678",
   },
 ];
 
@@ -90,18 +90,24 @@ function ContactPage() {
 
       {/* Quick contact tiles */}
       <section className="container mx-auto max-w-6xl px-4 py-14">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-3">
           {[
+            {
+              icon: Phone,
+              title: "Call us",
+              line1: "+49 40 5566 7788",
+              line2: "Mon–Fri · 08:00–20:00 CET",
+            },
             {
               icon: Mail,
               title: "Email",
-              line1: "swiftcargoapex@gmail.com",
+              line1: "hello@swiftcargo.com",
               line2: "support@swiftcargo.com",
             },
             {
               icon: Clock,
               title: "24/7 Operations",
-              line1: "swiftcargoapex@gmail.com",
+              line1: "+49 40 5566 7000",
               line2: "For active shipments only",
             },
           ].map(({ icon: Icon, title, line1, line2 }) => (
@@ -212,11 +218,11 @@ function ContactPage() {
                     <div className="font-bold">{o.city}</div>
                     <div className="mt-1 text-sm text-muted-foreground">{o.address}</div>
                     <a
-                      href={`mailto:${o.email}`}
+                      href={`tel:${o.phone.replace(/\s+/g, "")}`}
                       className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
                       style={{ color: "var(--primary)" }}
                     >
-                      <Mail className="h-3.5 w-3.5" /> {o.email}
+                      <Phone className="h-3.5 w-3.5" /> {o.phone}
                     </a>
                   </div>
                 </div>
@@ -227,7 +233,7 @@ function ContactPage() {
       </section>
 
       <footer className="container mx-auto max-w-6xl px-4 py-10 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Swift Cargo. Powered by OpenStreetMap.
+        © {new Date().getFullYear()} Swift Cargo Apex. Powered by OpenStreetMap.
       </footer>
     </div>
   );
