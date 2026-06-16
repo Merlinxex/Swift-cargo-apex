@@ -6,6 +6,8 @@ import teamImg from "@/assets/gallery/team.jpg.asset.json";
 import supplyChain from "@/assets/gallery/supply-chain.jpg.asset.json";
 import airLoading from "@/assets/gallery/air-loading.jpg.asset.json";
 
+const HERO_IMG = "https://ytsvvygxulgnttebhoqr.supabase.co/storage/v1/object/public/images/shell_truck_charge_web-1024x683-1.jpeg";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
@@ -60,6 +62,17 @@ function AboutPage() {
         className="relative overflow-hidden text-hero-foreground"
         style={{ background: "var(--gradient-hero)" }}
       >
+        <img
+          src={HERO_IMG}
+          alt="Swift Cargo Apex truck on the road"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-25"
+          loading="eager"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "linear-gradient(120deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2) 60%, transparent)" }}
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full opacity-20 blur-3xl"
