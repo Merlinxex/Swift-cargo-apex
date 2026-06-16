@@ -338,13 +338,13 @@ function Index() {
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1577702312706-e23ff063064f?w=600&q=80&auto=format&fit=crop"
-                alt="Brown shipping box placed on a wooden surface" />
+                src="https://images.unsplash.com/photo-1639678592362-b2bb42fa2725?w=600&q=80&auto=format&fit=crop"
+                alt="Car being towed on a flatbed trailer" />
             </div>
             <div className="overflow-hidden rounded-xl aspect-square">
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1624137527136-66e631bdaa0e?w=600&q=80&auto=format&fit=crop"
-                alt="White cardboard shipping box on a brown wooden table" />
+                src="https://images.unsplash.com/photo-1698998882426-39a6609ab10a?w=600&q=80&auto=format&fit=crop"
+                alt="Truck being towed on a flatbed transport trailer" />
             </div>
           </div>
 
@@ -372,8 +372,8 @@ function Index() {
             </div>
             <div className="overflow-hidden rounded-xl" style={{ height: 184 }}>
               <img loading="lazy" className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                src="https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=600&q=80&auto=format&fit=crop"
-                alt="Fleet of freight trucks lined up at logistics depot" />
+                src="https://images.unsplash.com/photo-1727170599582-34f23a85fd46?w=600&q=80&auto=format&fit=crop"
+                alt="Truck with trailer driving down a shipping road" />
             </div>
           </div>
         </div>
