@@ -37,16 +37,18 @@ type FormState = {
   destination_city: string;
   destination_lat: string;
   destination_lng: string;
+  current_lat: string;
+  current_lng: string;
   progress: string;
   eta_minutes: string;
   carrier: string;
   weight: string;
   service: string;
-  // Breeder (Sender)
+  package_description: string;
+  // Breeder
   breeder_name: string;
   breeder_address: string;
-  package_description: string;
-  // Receiver (Client)
+  // Client
   receiver_name: string;
   receiver_address: string;
   receiver_phone: string;
@@ -66,14 +68,16 @@ const blankForm: FormState = {
   destination_city: "",
   destination_lat: "",
   destination_lng: "",
+  current_lat: "",
+  current_lng: "",
   progress: "0",
   eta_minutes: "0",
   carrier: "Swift Cargo Apex",
   weight: "",
   service: "",
+  package_description: "",
   breeder_name: "",
   breeder_address: "",
-  package_description: "",
   receiver_name: "",
   receiver_address: "",
   receiver_phone: "",
@@ -94,9 +98,7 @@ function AdminPage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) {
-      navigate({ to: "/auth" });
-    }
+    if (!user) navigate({ to: "/auth" });
   }, [user, loading, navigate]);
 
   async function refresh() {
@@ -126,14 +128,16 @@ function AdminPage() {
       destination_city: s.destination.name,
       destination_lat: String(s.destination.lat),
       destination_lng: String(s.destination.lng),
+      current_lat: String(s.currentPosition.lat),
+      current_lng: String(s.currentPosition.lng),
       progress: String(Math.round(s.progress * 100)),
       eta_minutes: String(s.etaMinutes),
       carrier: s.carrier,
       weight: s.weight ?? "",
       service: s.service ?? "",
+      package_description: s.package_description ?? "",
       breeder_name: s.breeder_name ?? "",
       breeder_address: s.breeder_address ?? "",
-      package_description: s.package_description ?? "",
       receiver_name: s.receiver_name ?? "",
       receiver_address: s.receiver_address ?? "",
       receiver_phone: s.receiver_phone ?? "",
@@ -151,19 +155,21 @@ function AdminPage() {
       tracking_number: form.tracking_number.trim(),
       status: form.status.trim(),
       origin_city: form.origin_city.trim(),
-      origin_lat: parseFloat(form.origin_lat),
-      origin_lng: parseFloat(form.origin_lng),
+      origin_lat: parseFloat(form.origin_lat) || 0,
+      origin_lng: parseFloat(form.origin_lng) || 0,
       destination_city: form.destination_city.trim(),
-      destination_lat: parseFloat(form.destination_lat),
-      destination_lng: parseFloat(form.destination_lng),
+      destination_lat: parseFloat(form.destination_lat) || 0,
+      destination_lng: parseFloat(form.destination_lng) || 0,
+      current_lat: form.current_lat ? parseFloat(form.current_lat) : null,
+      current_lng: form.current_lng ? parseFloat(form.current_lng) : null,
       progress: Math.max(0, Math.min(100, parseInt(form.progress || "0", 10))),
       eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)),
       carrier: form.carrier.trim() || "Swift Cargo Apex",
       weight: form.weight.trim() || null,
       service: form.service.trim() || null,
+      package_description: form.package_description.trim() || null,
       breeder_name: form.breeder_name.trim() || null,
       breeder_address: form.breeder_address.trim() || null,
-      package_description: form.package_description.trim() || null,
       receiver_name: form.receiver_name.trim() || null,
       receiver_address: form.receiver_address.trim() || null,
       receiver_phone: form.receiver_phone.trim() || null,
@@ -196,10 +202,7 @@ function AdminPage() {
   async function remove(id: string) {
     if (!confirm("Delete this shipment? This cannot be undone.")) return;
     const { error } = await supabase.from("shipments").delete().eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
+    if (error) { toast.error(error.message); return; }
     toast.success("Shipment deleted");
     void refresh();
   }
@@ -274,9 +277,7 @@ function AdminPage() {
               <tbody>
                 {refreshing && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">
-                      Loading…
-                    </td>
+                    <td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Loading…</td>
                   </tr>
                 )}
                 {!refreshing && shipments.length === 0 && (
@@ -292,10 +293,7 @@ function AdminPage() {
                     <td className="px-4 py-3">
                       <span
                         className="rounded-full px-2.5 py-0.5 text-xs font-bold"
-                        style={{
-                          background: "var(--gradient-accent)",
-                          color: "var(--accent-foreground)",
-                        }}
+                        style={{ background: "var(--gradient-accent)", color: "var(--accent-foreground)" }}
                       >
                         {s.status}
                       </span>
@@ -305,13 +303,9 @@ function AdminPage() {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       <div>{s.receiver_name ?? "—"}</div>
-                      {s.receiver_phone && (
-                        <div className="text-xs text-muted-foreground">{s.receiver_phone}</div>
-                      )}
+                      {s.receiver_phone && <div className="text-xs">{s.receiver_phone}</div>}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {s.package_description ?? "—"}
-                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">{s.package_description ?? "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {s.amount_paid != null ? `$${s.amount_paid}` : "—"} / {s.amount_remaining != null ? `$${s.amount_remaining}` : "—"}
                     </td>
@@ -321,12 +315,7 @@ function AdminPage() {
                         <Button size="sm" variant="ghost" onClick={() => openEdit(s)}>
                           <Edit3 className="h-4 w-4" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => void remove(s.id)}
-                          className="text-destructive hover:text-destructive"
-                        >
+                        <Button size="sm" variant="ghost" onClick={() => void remove(s.id)} className="text-destructive hover:text-destructive">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -345,36 +334,30 @@ function AdminPage() {
             <DialogTitle>{form.id ? "Edit shipment" : "New shipment"}</DialogTitle>
           </DialogHeader>
 
+          {/* Hidden coordinate fields — used by the map, not shown to admin */}
+          <div style={{ display: "none" }}>
+            <Input value={form.origin_lat} onChange={(e) => setForm({ ...form, origin_lat: e.target.value })} />
+            <Input value={form.origin_lng} onChange={(e) => setForm({ ...form, origin_lng: e.target.value })} />
+            <Input value={form.destination_lat} onChange={(e) => setForm({ ...form, destination_lat: e.target.value })} />
+            <Input value={form.destination_lng} onChange={(e) => setForm({ ...form, destination_lng: e.target.value })} />
+            <Input value={form.current_lat} onChange={(e) => setForm({ ...form, current_lat: e.target.value })} />
+            <Input value={form.current_lng} onChange={(e) => setForm({ ...form, current_lng: e.target.value })} />
+          </div>
+
           {/* Shipment Info */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Tracking number" value={form.tracking_number}
               onChange={(v) => setForm({ ...form, tracking_number: v })} />
             <Field label="Status" value={form.status}
               onChange={(v) => setForm({ ...form, status: v })} />
-
-            <Field label="Origin city" value={form.origin_city}
+            <Field label="Origin" value={form.origin_city}
               onChange={(v) => setForm({ ...form, origin_city: v })} />
-            <div className="grid grid-cols-2 gap-2">
-              <Field label="Origin lat" value={form.origin_lat}
-                onChange={(v) => setForm({ ...form, origin_lat: v })} />
-              <Field label="Origin lng" value={form.origin_lng}
-                onChange={(v) => setForm({ ...form, origin_lng: v })} />
-            </div>
-
-            <Field label="Destination city" value={form.destination_city}
+            <Field label="Destination" value={form.destination_city}
               onChange={(v) => setForm({ ...form, destination_city: v })} />
-            <div className="grid grid-cols-2 gap-2">
-              <Field label="Dest lat" value={form.destination_lat}
-                onChange={(v) => setForm({ ...form, destination_lat: v })} />
-              <Field label="Dest lng" value={form.destination_lng}
-                onChange={(v) => setForm({ ...form, destination_lng: v })} />
-            </div>
-
             <Field label="Progress (%)" value={form.progress}
               onChange={(v) => setForm({ ...form, progress: v })} />
             <Field label="ETA minutes" value={form.eta_minutes}
               onChange={(v) => setForm({ ...form, eta_minutes: v })} />
-
             <Field label="Carrier" value={form.carrier}
               onChange={(v) => setForm({ ...form, carrier: v })} />
             <Field label="Service" value={form.service}
@@ -385,11 +368,9 @@ function AdminPage() {
               onChange={(v) => setForm({ ...form, package_description: v })} />
           </div>
 
-          {/* Breeder Details */}
+          {/* Breeder Info */}
           <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Breeder Info
-            </p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Breeder Info</p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Breeder name" value={form.breeder_name}
                 onChange={(v) => setForm({ ...form, breeder_name: v })} />
@@ -398,11 +379,9 @@ function AdminPage() {
             </div>
           </div>
 
-          {/* Client / Receiver Details */}
+          {/* Client Info */}
           <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Client Info
-            </p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Client Info</p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Receiver name" value={form.receiver_name}
                 onChange={(v) => setForm({ ...form, receiver_name: v })} />
@@ -415,11 +394,9 @@ function AdminPage() {
             </div>
           </div>
 
-          {/* Payment Details */}
+          {/* Payment */}
           <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Payment
-            </p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment</p>
             <div className="grid grid-cols-3 gap-4">
               <Field label="Total price ($)" value={form.total_price}
                 onChange={(v) => setForm({ ...form, total_price: v })} />
