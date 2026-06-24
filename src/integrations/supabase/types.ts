@@ -16,6 +16,9 @@ export type Database = {
     Tables: {
       shipments: {
         Row: {
+          amount_paid: number | null
+          breeder_address: string | null
+          breeder_name: string | null
           carrier: string
           created_at: string
           current_lat: number | null
@@ -29,15 +32,24 @@ export type Database = {
           origin_city: string
           origin_lat: number
           origin_lng: number
+          package_description: string | null
           progress: number
+          receiver_address: string | null
+          receiver_email: string | null
+          receiver_name: string | null
+          receiver_phone: string | null
           service: string | null
           shipped_date: string
           status: string
+          total_price: number | null
           tracking_number: string
           updated_at: string
           weight: string | null
         }
         Insert: {
+          amount_paid?: number | null
+          breeder_address?: string | null
+          breeder_name?: string | null
           carrier?: string
           created_at?: string
           current_lat?: number | null
@@ -51,15 +63,24 @@ export type Database = {
           origin_city: string
           origin_lat: number
           origin_lng: number
+          package_description?: string | null
           progress?: number
+          receiver_address?: string | null
+          receiver_email?: string | null
+          receiver_name?: string | null
+          receiver_phone?: string | null
           service?: string | null
           shipped_date?: string
           status?: string
+          total_price?: number | null
           tracking_number: string
           updated_at?: string
           weight?: string | null
         }
         Update: {
+          amount_paid?: number | null
+          breeder_address?: string | null
+          breeder_name?: string | null
           carrier?: string
           created_at?: string
           current_lat?: number | null
@@ -73,10 +94,16 @@ export type Database = {
           origin_city?: string
           origin_lat?: number
           origin_lng?: number
+          package_description?: string | null
           progress?: number
+          receiver_address?: string | null
+          receiver_email?: string | null
+          receiver_name?: string | null
+          receiver_phone?: string | null
           service?: string | null
           shipped_date?: string
           status?: string
+          total_price?: number | null
           tracking_number?: string
           updated_at?: string
           weight?: string | null

@@ -77,16 +77,8 @@ function TrackPage() {
     setProgress(baseShipment.progress);
     setEtaMinutes(baseShipment.etaMinutes);
 
-    const interval = setInterval(() => {
-      setProgress((p: number) => {
-        if (p >= 1) return 1;
-        return Math.min(1, p + 0.004);
-      });
-      setEtaMinutes((m: number) =>
-        Math.max(0, m - 0.4 * baseShipment.etaMinutes * 0.01),
-      );
-    }, 3000);
-    return () => clearInterval(interval);
+    // ETA is tracked in days; no per-second decrement.
+    return () => {};
   }, [baseShipment]);
 
   const currentPosition = useMemo(() => {

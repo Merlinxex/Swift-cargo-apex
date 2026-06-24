@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/SiteHeader";
+import { LocationPickerMap } from "@/components/LocationPickerMap";
 import {
   Dialog,
   DialogContent,
@@ -20,8 +21,8 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Dashboard — Swift Cargo" },
-      { name: "description", content: "Manage shipments in the Swift Cargo admin dashboard." },
+      { title: "Admin Dashboard — Swift Cargo Apex" },
+      { name: "description", content: "Manage shipments in the Swift Cargo Apex admin dashboard." },
     ],
   }),
   component: AdminPage,
@@ -45,18 +46,14 @@ type FormState = {
   weight: string;
   service: string;
   package_description: string;
-  // Breeder
   breeder_name: string;
   breeder_address: string;
-  // Client
   receiver_name: string;
-  receiver_address: string;
   receiver_phone: string;
   receiver_email: string;
-  // Payment
+  receiver_address: string;
   total_price: string;
   amount_paid: string;
-  amount_remaining: string;
 };
 
 const blankForm: FormState = {
@@ -79,12 +76,11 @@ const blankForm: FormState = {
   breeder_name: "",
   breeder_address: "",
   receiver_name: "",
-  receiver_address: "",
   receiver_phone: "",
   receiver_email: "",
+  receiver_address: "",
   total_price: "",
   amount_paid: "",
-  amount_remaining: "",
 };
 
 function AdminPage() {
@@ -98,7 +94,9 @@ function AdminPage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) navigate({ to: "/auth" });
+    if (!user) {
+      navigate({ to: "/auth" });
+    }
   }, [user, loading, navigate]);
 
   async function refresh() {
@@ -131,26 +129,29 @@ function AdminPage() {
       current_lat: String(s.currentPosition.lat),
       current_lng: String(s.currentPosition.lng),
       progress: String(Math.round(s.progress * 100)),
-      eta_minutes: String(s.etaMinutes),
+      eta_minutes: String(Math.max(0, Math.round(s.etaMinutes / 1440))),
       carrier: s.carrier,
       weight: s.weight ?? "",
       service: s.service ?? "",
-      package_description: s.package_description ?? "",
-      breeder_name: s.breeder_name ?? "",
-      breeder_address: s.breeder_address ?? "",
-      receiver_name: s.receiver_name ?? "",
-      receiver_address: s.receiver_address ?? "",
-      receiver_phone: s.receiver_phone ?? "",
-      receiver_email: s.receiver_email ?? "",
-      total_price: s.total_price != null ? String(s.total_price) : "",
-      amount_paid: s.amount_paid != null ? String(s.amount_paid) : "",
-      amount_remaining: s.amount_remaining != null ? String(s.amount_remaining) : "",
+      package_description: s.packageDescription ?? "",
+      breeder_name: s.breederName ?? "",
+      breeder_address: s.breederAddress ?? "",
+      receiver_name: s.receiverName ?? "",
+      receiver_phone: s.receiverPhone ?? "",
+      receiver_email: s.receiverEmail ?? "",
+      receiver_address: s.receiverAddress ?? "",
+      total_price: s.totalPrice != null ? String(s.totalPrice) : "",
+      amount_paid: s.amountPaid != null ? String(s.amountPaid) : "",
     });
     setOpen(true);
   }
 
   async function save() {
     setSaving(true);
+    const numOrNull = (v: string) => {
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : null;
+    };
     const payload = {
       tracking_number: form.tracking_number.trim(),
       status: form.status.trim(),
@@ -163,7 +164,7 @@ function AdminPage() {
       current_lat: form.current_lat ? parseFloat(form.current_lat) : null,
       current_lng: form.current_lng ? parseFloat(form.current_lng) : null,
       progress: Math.max(0, Math.min(100, parseInt(form.progress || "0", 10))),
-      eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)),
+      eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)) * 1440,
       carrier: form.carrier.trim() || "Swift Cargo Apex",
       weight: form.weight.trim() || null,
       service: form.service.trim() || null,
@@ -171,12 +172,11 @@ function AdminPage() {
       breeder_name: form.breeder_name.trim() || null,
       breeder_address: form.breeder_address.trim() || null,
       receiver_name: form.receiver_name.trim() || null,
-      receiver_address: form.receiver_address.trim() || null,
       receiver_phone: form.receiver_phone.trim() || null,
       receiver_email: form.receiver_email.trim() || null,
-      total_price: form.total_price ? parseFloat(form.total_price) : null,
-      amount_paid: form.amount_paid ? parseFloat(form.amount_paid) : null,
-      amount_remaining: form.amount_remaining ? parseFloat(form.amount_remaining) : null,
+      receiver_address: form.receiver_address.trim() || null,
+      total_price: numOrNull(form.total_price),
+      amount_paid: numOrNull(form.amount_paid),
     };
 
     try {
@@ -202,7 +202,10 @@ function AdminPage() {
   async function remove(id: string) {
     if (!confirm("Delete this shipment? This cannot be undone.")) return;
     const { error } = await supabase.from("shipments").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Shipment deleted");
     void refresh();
   }
@@ -267,22 +270,22 @@ function AdminPage() {
                   <th className="px-4 py-3">Tracking #</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Route</th>
-                  <th className="px-4 py-3">Receiver</th>
-                  <th className="px-4 py-3">Package</th>
-                  <th className="px-4 py-3">Paid / Remaining</th>
                   <th className="px-4 py-3">Progress</th>
+                  <th className="px-4 py-3">ETA (days)</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {refreshing && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-6 text-center text-muted-foreground">Loading…</td>
+                    <td colSpan={6} className="px-4 py-6 text-center text-muted-foreground">
+                      Loading…
+                    </td>
                   </tr>
                 )}
                 {!refreshing && shipments.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
                       No shipments yet. Click "New shipment" to add one.
                     </td>
                   </tr>
@@ -293,7 +296,10 @@ function AdminPage() {
                     <td className="px-4 py-3">
                       <span
                         className="rounded-full px-2.5 py-0.5 text-xs font-bold"
-                        style={{ background: "var(--gradient-accent)", color: "var(--accent-foreground)" }}
+                        style={{
+                          background: "var(--gradient-accent)",
+                          color: "var(--accent-foreground)",
+                        }}
                       >
                         {s.status}
                       </span>
@@ -301,21 +307,19 @@ function AdminPage() {
                     <td className="px-4 py-3 text-muted-foreground">
                       {s.origin.name} → {s.destination.name}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      <div>{s.receiver_name ?? "—"}</div>
-                      {s.receiver_phone && <div className="text-xs">{s.receiver_phone}</div>}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">{s.package_description ?? "—"}</td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {s.amount_paid != null ? `$${s.amount_paid}` : "—"} / {s.amount_remaining != null ? `$${s.amount_remaining}` : "—"}
-                    </td>
                     <td className="px-4 py-3">{Math.round(s.progress * 100)}%</td>
+                    <td className="px-4 py-3">{Math.max(0, Math.round(s.etaMinutes / 1440))}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
                         <Button size="sm" variant="ghost" onClick={() => openEdit(s)}>
                           <Edit3 className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="ghost" onClick={() => void remove(s.id)} className="text-destructive hover:text-destructive">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => void remove(s.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -334,44 +338,38 @@ function AdminPage() {
             <DialogTitle>{form.id ? "Edit shipment" : "New shipment"}</DialogTitle>
           </DialogHeader>
 
-          {/* Hidden coordinate fields — used by the map, not shown to admin */}
-          <div style={{ display: "none" }}>
-            <Input value={form.origin_lat} onChange={(e) => setForm({ ...form, origin_lat: e.target.value })} />
-            <Input value={form.origin_lng} onChange={(e) => setForm({ ...form, origin_lng: e.target.value })} />
-            <Input value={form.destination_lat} onChange={(e) => setForm({ ...form, destination_lat: e.target.value })} />
-            <Input value={form.destination_lng} onChange={(e) => setForm({ ...form, destination_lng: e.target.value })} />
-            <Input value={form.current_lat} onChange={(e) => setForm({ ...form, current_lat: e.target.value })} />
-            <Input value={form.current_lng} onChange={(e) => setForm({ ...form, current_lng: e.target.value })} />
-          </div>
-
-          {/* Shipment Info */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Tracking number" value={form.tracking_number}
               onChange={(v) => setForm({ ...form, tracking_number: v })} />
             <Field label="Status" value={form.status}
               onChange={(v) => setForm({ ...form, status: v })} />
+
             <Field label="Origin" value={form.origin_city}
               onChange={(v) => setForm({ ...form, origin_city: v })} />
             <Field label="Destination" value={form.destination_city}
               onChange={(v) => setForm({ ...form, destination_city: v })} />
+
             <Field label="Progress (%)" value={form.progress}
               onChange={(v) => setForm({ ...form, progress: v })} />
-            <Field label="ETA minutes" value={form.eta_minutes}
+            <Field label="ETA (days)" value={form.eta_minutes}
               onChange={(v) => setForm({ ...form, eta_minutes: v })} />
+
             <Field label="Carrier" value={form.carrier}
               onChange={(v) => setForm({ ...form, carrier: v })} />
             <Field label="Service" value={form.service}
               onChange={(v) => setForm({ ...form, service: v })} />
+
             <Field label="Weight" value={form.weight}
               onChange={(v) => setForm({ ...form, weight: v })} />
             <Field label="Package description" value={form.package_description}
               onChange={(v) => setForm({ ...form, package_description: v })} />
           </div>
 
-          {/* Breeder Info */}
-          <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Breeder Info</p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Breeder info
+            </h3>
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Breeder name" value={form.breeder_name}
                 onChange={(v) => setForm({ ...form, breeder_name: v })} />
               <Field label="Breeder location / address" value={form.breeder_address}
@@ -379,10 +377,11 @@ function AdminPage() {
             </div>
           </div>
 
-          {/* Client Info */}
-          <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Client Info</p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Client info
+            </h3>
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Receiver name" value={form.receiver_name}
                 onChange={(v) => setForm({ ...form, receiver_name: v })} />
               <Field label="Receiver phone" value={form.receiver_phone}
@@ -394,20 +393,73 @@ function AdminPage() {
             </div>
           </div>
 
-          {/* Payment */}
-          <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment</p>
-            <div className="grid grid-cols-3 gap-4">
+          <div className="mt-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Payment
+            </h3>
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
               <Field label="Total price ($)" value={form.total_price}
                 onChange={(v) => setForm({ ...form, total_price: v })} />
               <Field label="Amount paid ($)" value={form.amount_paid}
                 onChange={(v) => setForm({ ...form, amount_paid: v })} />
-              <Field label="Amount remaining ($)" value={form.amount_remaining}
-                onChange={(v) => setForm({ ...form, amount_remaining: v })} />
+              <div>
+                <Label className="text-xs">Amount remaining ($)</Label>
+                <Input
+                  readOnly
+                  value={(() => {
+                    const total = parseFloat(form.total_price);
+                    const paid = parseFloat(form.amount_paid);
+                    if (!Number.isFinite(total)) return "";
+                    const remaining = total - (Number.isFinite(paid) ? paid : 0);
+                    return remaining.toFixed(2);
+                  })()}
+                />
+              </div>
             </div>
           </div>
 
-          <DialogFooter className="mt-6">
+          <div className="mt-6">
+            <Label className="text-xs">Current location — click the map or drag the marker</Label>
+            <div className="mt-2">
+              <LocationPickerMap
+                value={
+                  form.current_lat && form.current_lng
+                    ? { lat: parseFloat(form.current_lat), lng: parseFloat(form.current_lng) }
+                    : null
+                }
+                onChange={(v) =>
+                  setForm((f) => ({
+                    ...f,
+                    current_lat: String(v.lat),
+                    current_lng: String(v.lng),
+                    origin_lat: f.origin_lat || String(v.lat),
+                    origin_lng: f.origin_lng || String(v.lng),
+                    destination_lat: f.destination_lat || String(v.lat),
+                    destination_lng: f.destination_lng || String(v.lng),
+                  }))
+                }
+                origin={
+                  form.origin_lat && form.origin_lng
+                    ? { lat: parseFloat(form.origin_lat), lng: parseFloat(form.origin_lng) }
+                    : null
+                }
+                destination={
+                  form.destination_lat && form.destination_lng
+                    ? {
+                        lat: parseFloat(form.destination_lat),
+                        lng: parseFloat(form.destination_lng),
+                      }
+                    : null
+                }
+              />
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Click the map to set the current shipment marker. Coordinates are kept internal.
+            </p>
+          </div>
+
+
+          <DialogFooter>
             <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
             <Button
               onClick={() => void save()}

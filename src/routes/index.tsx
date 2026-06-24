@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, MapPin, Clock, ShieldCheck, Truck, Globe2, PackageSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SiteHeader } from "@/components/SiteHeader";
-import { listSampleTrackingNumbers } from "@/lib/shipments";
+
 import heroTruck from "@/assets/gallery/hero-truck.jpg.asset.json";
 import roadCars from "@/assets/gallery/road-cars.jpg.asset.json";
 import airCargo from "@/assets/gallery/air-cargo.jpg.asset.json";
@@ -180,11 +180,6 @@ function SplitBand({
 function Index() {
   const navigate = useNavigate();
   const [tn, setTn] = useState("");
-  const [samples, setSamples] = useState<string[]>([]);
-
-  useEffect(() => {
-    void listSampleTrackingNumbers(4).then(setSamples);
-  }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -258,21 +253,6 @@ function Index() {
             </Button>
           </form>
 
-          {samples.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs text-hero-foreground/70">
-              <span>Try:</span>
-              {samples.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setTn(s)}
-                  className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[11px] transition-colors hover:bg-white/15"
-                  type="button"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 
