@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import {
@@ -25,8 +25,6 @@ import {
   formatCurrency,
   formatEta,
   formatShippedDate,
-  interpolate,
-  listSampleTrackingNumbers,
   type Shipment,
 } from "@/lib/shipments";
 
@@ -81,10 +79,11 @@ function TrackPage() {
     setEtaMinutes(baseShipment.etaMinutes);
   }, [baseShipment]);
 
+  // Use the stored current position from the DB directly — admin sets this via the map picker
   const currentPosition = useMemo(() => {
     if (!baseShipment) return null;
-    return interpolate(baseShipment.origin, baseShipment.destination, progress);
-  }, [baseShipment, progress]);
+    return baseShipment.currentPosition;
+  }, [baseShipment]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -414,45 +413,25 @@ function InfoRow({
 }
 
 function EmptyState() {
-  const [samples, setSamples] = useState<string[]>([]);
-  useEffect(() => { void listSampleTrackingNumbers(6).then(setSamples); }, []);
   return (
     <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
       <Package className="mx-auto h-10 w-10 text-muted-foreground" />
       <h2 className="mt-4 text-xl font-bold">Enter a tracking number</h2>
-      <p className="mt-2 text-sm text-muted-foreground">Try one of our demo shipments below.</p>
-      <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {samples.map((s) => (
-          <Link key={s} to="/track" search={{ tn: s }}
-            className="rounded-full border border-border bg-secondary px-3 py-1 font-mono text-xs transition-colors hover:bg-accent hover:text-accent-foreground"
-          >
-            {s}
-          </Link>
-        ))}
-      </div>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Type your tracking number above and press <span className="font-semibold">Track</span> to see your shipment details.
+      </p>
     </div>
   );
 }
 
 function NotFound({ query }: { query: string }) {
-  const [samples, setSamples] = useState<string[]>([]);
-  useEffect(() => { void listSampleTrackingNumbers(6).then(setSamples); }, []);
   return (
     <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center">
       <h2 className="text-xl font-bold">Tracking number not found</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         We couldn't find a shipment matching{" "}
-        <span className="font-mono font-semibold">{query}</span>. Double-check the number or try a demo one.
+        <span className="font-mono font-semibold">{query}</span>. Please double-check the tracking number on your confirmation email or contact support.
       </p>
-      <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {samples.map((s) => (
-          <Link key={s} to="/track" search={{ tn: s }}
-            className="rounded-full border border-border bg-card px-3 py-1 font-mono text-xs hover:bg-accent hover:text-accent-foreground"
-          >
-            {s}
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
