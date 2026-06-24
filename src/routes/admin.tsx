@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Edit3, Plus, ShieldAlert, Trash2 } from "lucide-react";
+import { Edit3, Loader2, MapPin, Plus, ShieldAlert, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { listShipments, type Shipment } from "@/lib/shipments";
+import { CURRENCIES, geocodeAddress, listShipments, type Shipment } from "@/lib/shipments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,13 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -54,6 +61,9 @@ type FormState = {
   receiver_address: string;
   total_price: string;
   amount_paid: string;
+  currency: string;
+  shipped_at: string;
+  expected_delivery_at: string;
 };
 
 const blankForm: FormState = {
@@ -81,7 +91,19 @@ const blankForm: FormState = {
   receiver_address: "",
   total_price: "",
   amount_paid: "",
+  currency: "USD",
+  shipped_at: "",
+  expected_delivery_at: "",
 };
+
+function toDatetimeLocal(iso: string | null | undefined): string {
+  if (!iso) return "";
+  // Convert ISO UTC → datetime-local value (browser local time)
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
@@ -91,12 +113,12 @@ function AdminPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(blankForm);
   const [saving, setSaving] = useState(false);
+  const [geocodingOrigin, setGeocodingOrigin] = useState(false);
+  const [geocodingDest, setGeocodingDest] = useState(false);
 
   useEffect(() => {
     if (loading) return;
-    if (!user) {
-      navigate({ to: "/auth" });
-    }
+    if (!user) navigate({ to: "/auth" });
   }, [user, loading, navigate]);
 
   async function refresh() {
@@ -142,8 +164,47 @@ function AdminPage() {
       receiver_address: s.receiverAddress ?? "",
       total_price: s.totalPrice != null ? String(s.totalPrice) : "",
       amount_paid: s.amountPaid != null ? String(s.amountPaid) : "",
+      currency: s.currency ?? "USD",
+      shipped_at: toDatetimeLocal(s.shippedAtTimestamp),
+      expected_delivery_at: toDatetimeLocal(s.expectedDeliveryAt),
     });
     setOpen(true);
+  }
+
+  async function autoGeocode(type: "origin" | "destination") {
+    const city = type === "origin" ? form.origin_city : form.destination_city;
+    if (!city.trim()) {
+      toast.error("Enter a city/address first");
+      return;
+    }
+    if (type === "origin") setGeocodingOrigin(true);
+    else setGeocodingDest(true);
+
+    const coords = await geocodeAddress(city);
+
+    if (type === "origin") setGeocodingOrigin(false);
+    else setGeocodingDest(false);
+
+    if (!coords) {
+      toast.error(`Could not geocode "${city}" — try a more specific address`);
+      return;
+    }
+    if (type === "origin") {
+      setForm((f) => ({
+        ...f,
+        origin_lat: String(coords.lat),
+        origin_lng: String(coords.lng),
+        current_lat: f.current_lat || String(coords.lat),
+        current_lng: f.current_lng || String(coords.lng),
+      }));
+    } else {
+      setForm((f) => ({
+        ...f,
+        destination_lat: String(coords.lat),
+        destination_lng: String(coords.lng),
+      }));
+    }
+    toast.success(`Coordinates set for "${city}"`);
   }
 
   async function save() {
@@ -152,6 +213,12 @@ function AdminPage() {
       const n = parseFloat(v);
       return Number.isFinite(n) ? n : null;
     };
+    const isoOrNull = (v: string) => {
+      if (!v) return null;
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d.toISOString();
+    };
+
     const payload = {
       tracking_number: form.tracking_number.trim(),
       status: form.status.trim(),
@@ -177,6 +244,9 @@ function AdminPage() {
       receiver_address: form.receiver_address.trim() || null,
       total_price: numOrNull(form.total_price),
       amount_paid: numOrNull(form.amount_paid),
+      currency: form.currency || "USD",
+      shipped_at: isoOrNull(form.shipped_at),
+      expected_delivery_at: isoOrNull(form.expected_delivery_at),
     };
 
     try {
@@ -239,6 +309,13 @@ function AdminPage() {
     );
   }
 
+  const amountRemaining = (() => {
+    const total = parseFloat(form.total_price);
+    const paid = parseFloat(form.amount_paid);
+    if (!Number.isFinite(total)) return "";
+    return (total - (Number.isFinite(paid) ? paid : 0)).toFixed(2);
+  })();
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -278,9 +355,7 @@ function AdminPage() {
               <tbody>
                 {refreshing && (
                   <tr>
-                    <td colSpan={6} className="px-4 py-6 text-center text-muted-foreground">
-                      Loading…
-                    </td>
+                    <td colSpan={6} className="px-4 py-6 text-center text-muted-foreground">Loading…</td>
                   </tr>
                 )}
                 {!refreshing && shipments.length === 0 && (
@@ -296,10 +371,7 @@ function AdminPage() {
                     <td className="px-4 py-3">
                       <span
                         className="rounded-full px-2.5 py-0.5 text-xs font-bold"
-                        style={{
-                          background: "var(--gradient-accent)",
-                          color: "var(--accent-foreground)",
-                        }}
+                        style={{ background: "var(--gradient-accent)", color: "var(--accent-foreground)" }}
                       >
                         {s.status}
                       </span>
@@ -338,16 +410,68 @@ function AdminPage() {
             <DialogTitle>{form.id ? "Edit shipment" : "New shipment"}</DialogTitle>
           </DialogHeader>
 
+          {/* ── Basic info ── */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Tracking number" value={form.tracking_number}
               onChange={(v) => setForm({ ...form, tracking_number: v })} />
             <Field label="Status" value={form.status}
               onChange={(v) => setForm({ ...form, status: v })} />
 
-            <Field label="Origin" value={form.origin_city}
-              onChange={(v) => setForm({ ...form, origin_city: v })} />
-            <Field label="Destination" value={form.destination_city}
-              onChange={(v) => setForm({ ...form, destination_city: v })} />
+            {/* Origin with geocode button */}
+            <div>
+              <Label className="text-xs">Origin city / address</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  value={form.origin_city}
+                  onChange={(e) => setForm({ ...form, origin_city: e.target.value })}
+                  placeholder="e.g. New York, USA"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => void autoGeocode("origin")}
+                  disabled={geocodingOrigin}
+                  title="Auto-detect coordinates"
+                  className="shrink-0 px-2"
+                >
+                  {geocodingOrigin ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+                </Button>
+              </div>
+              {form.origin_lat && form.origin_lng && (
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  {parseFloat(form.origin_lat).toFixed(4)}, {parseFloat(form.origin_lng).toFixed(4)}
+                </p>
+              )}
+            </div>
+
+            {/* Destination with geocode button */}
+            <div>
+              <Label className="text-xs">Destination city / address</Label>
+              <div className="flex gap-2 mt-1">
+                <Input
+                  value={form.destination_city}
+                  onChange={(e) => setForm({ ...form, destination_city: e.target.value })}
+                  placeholder="e.g. London, UK"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => void autoGeocode("destination")}
+                  disabled={geocodingDest}
+                  title="Auto-detect coordinates"
+                  className="shrink-0 px-2"
+                >
+                  {geocodingDest ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+                </Button>
+              </div>
+              {form.destination_lat && form.destination_lng && (
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  {parseFloat(form.destination_lat).toFixed(4)}, {parseFloat(form.destination_lng).toFixed(4)}
+                </p>
+              )}
+            </div>
 
             <Field label="Progress (%)" value={form.progress}
               onChange={(v) => setForm({ ...form, progress: v })} />
@@ -365,21 +489,48 @@ function AdminPage() {
               onChange={(v) => setForm({ ...form, package_description: v })} />
           </div>
 
+          {/* ── Dates ── */}
           <div className="mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Breeder info
+              Shipping dates
             </h3>
             <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field label="Breeder name" value={form.breeder_name}
+              <div>
+                <Label className="text-xs">Date &amp; time shipped</Label>
+                <Input
+                  type="datetime-local"
+                  value={form.shipped_at}
+                  onChange={(e) => setForm({ ...form, shipped_at: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Expected delivery date &amp; time</Label>
+                <Input
+                  type="datetime-local"
+                  value={form.expected_delivery_at}
+                  onChange={(e) => setForm({ ...form, expected_delivery_at: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Sender info ── */}
+          <div className="mt-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Sender / breeder info
+            </h3>
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Field label="Sender name" value={form.breeder_name}
                 onChange={(v) => setForm({ ...form, breeder_name: v })} />
-              <Field label="Breeder location / address" value={form.breeder_address}
+              <Field label="Sender address" value={form.breeder_address}
                 onChange={(v) => setForm({ ...form, breeder_address: v })} />
             </div>
           </div>
 
+          {/* ── Receiver info ── */}
           <div className="mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Client info
+              Receiver / client info
             </h3>
             <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Receiver name" value={form.receiver_name}
@@ -393,31 +544,40 @@ function AdminPage() {
             </div>
           </div>
 
+          {/* ── Payment ── */}
           <div className="mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Payment
             </h3>
-            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <Field label="Total price ($)" value={form.total_price}
+            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {/* Currency selector */}
+              <div className="sm:col-span-2">
+                <Label className="text-xs">Currency</Label>
+                <Select value={form.currency} onValueChange={(v) => setForm({ ...form, currency: v })}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CURRENCIES.map((c) => (
+                      <SelectItem key={c.code} value={c.code}>{c.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Field label={`Total price (${form.currency})`} value={form.total_price}
                 onChange={(v) => setForm({ ...form, total_price: v })} />
-              <Field label="Amount paid ($)" value={form.amount_paid}
+              <Field label={`Amount paid (${form.currency})`} value={form.amount_paid}
                 onChange={(v) => setForm({ ...form, amount_paid: v })} />
-              <div>
-                <Label className="text-xs">Amount remaining ($)</Label>
-                <Input
-                  readOnly
-                  value={(() => {
-                    const total = parseFloat(form.total_price);
-                    const paid = parseFloat(form.amount_paid);
-                    if (!Number.isFinite(total)) return "";
-                    const remaining = total - (Number.isFinite(paid) ? paid : 0);
-                    return remaining.toFixed(2);
-                  })()}
-                />
+
+              <div className="sm:col-span-2">
+                <Label className="text-xs">Amount remaining ({form.currency})</Label>
+                <Input readOnly value={amountRemaining} className="bg-secondary/40 text-muted-foreground" />
               </div>
             </div>
           </div>
 
+          {/* ── Map ── */}
           <div className="mt-6">
             <Label className="text-xs">Current location — click the map or drag the marker</Label>
             <div className="mt-2">
@@ -445,19 +605,16 @@ function AdminPage() {
                 }
                 destination={
                   form.destination_lat && form.destination_lng
-                    ? {
-                        lat: parseFloat(form.destination_lat),
-                        lng: parseFloat(form.destination_lng),
-                      }
+                    ? { lat: parseFloat(form.destination_lat), lng: parseFloat(form.destination_lng) }
                     : null
                 }
               />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Click the map to set the current shipment marker. Coordinates are kept internal.
+              Click the map to set the current shipment marker. Or type a city above and press the
+              <MapPin className="inline h-3 w-3 mx-1" />pin button to auto-fill coordinates.
             </p>
           </div>
-
 
           <DialogFooter>
             <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
