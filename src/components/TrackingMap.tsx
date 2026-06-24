@@ -9,16 +9,11 @@ type Props = {
   current: LatLng;
 };
 
-/**
- * Free OpenStreetMap-based tracker map (no API key required).
- * We initialize Leaflet imperatively to avoid SSR issues.
- */
 export function TrackingMap({ origin, destination, current }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
 
-  // Build a custom amber marker icon using inline SVG (no external assets).
   const truckIcon = useMemo(
     () =>
       L.divIcon({
@@ -47,12 +42,14 @@ export function TrackingMap({ origin, destination, current }: Props) {
     });
     mapRef.current = map;
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    // English-language tile layer via Cartodb Positron (always English labels)
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: "abcd",
     }).addTo(map);
 
-    // Origin / destination static markers
     const pinIcon = (color: string) =>
       L.divIcon({
         className: "endpoint-marker",
@@ -72,21 +69,12 @@ export function TrackingMap({ origin, destination, current }: Props) {
       .addTo(map)
       .bindPopup(`<b>Destination</b><br/>${destination.name}`);
 
-    // Route line
     L.polyline(
-      [
-        [origin.lat, origin.lng],
-        [destination.lat, destination.lng],
-      ],
-      {
-        color: "oklch(0.24 0.08 265)",
-        weight: 3,
-        opacity: 0.55,
-        dashArray: "8, 8",
-      },
+      [[origin.lat, origin.lng], [destination.lat, destination.lng]],
+      { color: "oklch(0.24 0.08 265)", weight: 3, opacity: 0.55, dashArray: "8, 8" },
     ).addTo(map);
 
-    // Current shipment marker
+    // Use the actual stored current position (already correct lat/lng from DB)
     const marker = L.marker([current.lat, current.lng], { icon: truckIcon }).addTo(map);
     marker.bindPopup("Shipment is here").openPopup();
     markerRef.current = marker;
@@ -94,6 +82,7 @@ export function TrackingMap({ origin, destination, current }: Props) {
     const bounds = L.latLngBounds([
       [origin.lat, origin.lng],
       [destination.lat, destination.lng],
+      [current.lat, current.lng],
     ]);
     map.fitBounds(bounds, { padding: [40, 40] });
 
@@ -105,7 +94,6 @@ export function TrackingMap({ origin, destination, current }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Live update marker when current position changes
   useEffect(() => {
     if (markerRef.current) {
       markerRef.current.setLatLng([current.lat, current.lng]);
