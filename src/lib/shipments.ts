@@ -1,4 +1,4 @@
-// Shipment types and helpers. Data lives in Lovable Cloud (Supabase).
+// Shipment types and helpers. Data lives in Supabase.
 import { supabase } from "@/integrations/supabase/client";
 
 export type HistoryEvent = { time?: string; at?: string; label: string };
@@ -17,8 +17,12 @@ export type Shipment = {
   carrier: string;
   weight: string | null;
   service: string | null;
-  /** ISO date string of when the package was shipped */
+  /** ISO date string of when the package was shipped (legacy fallback) */
   shippedAt: string;
+  /** Actual shipped date+time (admin-set) */
+  shippedAtTimestamp: string | null;
+  /** Expected delivery date+time */
+  expectedDeliveryAt: string | null;
   history: HistoryEvent[];
   packageDescription: string | null;
   breederName: string | null;
@@ -29,6 +33,7 @@ export type Shipment = {
   receiverAddress: string | null;
   totalPrice: number | null;
   amountPaid: number | null;
+  currency: string;
 };
 
 type ShipmentRow = {
@@ -49,6 +54,8 @@ type ShipmentRow = {
   weight: string | null;
   service: string | null;
   shipped_date: string;
+  shipped_at: string | null;
+  expected_delivery_at: string | null;
   history: unknown;
   package_description: string | null;
   breeder_name: string | null;
@@ -59,6 +66,7 @@ type ShipmentRow = {
   receiver_address: string | null;
   total_price: number | string | null;
   amount_paid: number | string | null;
+  currency: string | null;
 };
 
 function rowToShipment(r: ShipmentRow): Shipment {
@@ -85,6 +93,8 @@ function rowToShipment(r: ShipmentRow): Shipment {
     weight: r.weight,
     service: r.service,
     shippedAt: r.shipped_date,
+    shippedAtTimestamp: r.shipped_at ?? null,
+    expectedDeliveryAt: r.expected_delivery_at ?? null,
     history: Array.isArray(r.history) ? (r.history as HistoryEvent[]) : [],
     packageDescription: r.package_description ?? null,
     breederName: r.breeder_name ?? null,
@@ -95,6 +105,7 @@ function rowToShipment(r: ShipmentRow): Shipment {
     receiverAddress: r.receiver_address ?? null,
     totalPrice: toNum(r.total_price),
     amountPaid: toNum(r.amount_paid),
+    currency: r.currency ?? "USD",
   };
 }
 
@@ -140,7 +151,8 @@ export function interpolate(
   };
 }
 
-export function formatShippedDate(iso: string): string {
+export function formatShippedDate(iso: string | null | undefined): string {
+  if (!iso) return "—";
   const d = new Date(iso);
   return d.toLocaleString(undefined, {
     dateStyle: "medium",
@@ -153,3 +165,54 @@ export function formatEta(minutes: number): string {
   const days = Math.max(1, Math.round(minutes / 1440));
   return days === 1 ? "1 day" : `${days} days`;
 }
+
+/** Format a currency amount with the correct symbol */
+export function formatCurrency(amount: number | null, currency: string): string {
+  if (amount === null) return "—";
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return `${currency} ${amount.toFixed(2)}`;
+  }
+}
+
+/** Geocode a city/address string → {lat, lng} using Nominatim (OpenStreetMap) */
+export async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
+  if (!address.trim()) return null;
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
+    const res = await fetch(url, { headers: { "Accept-Language": "en" } });
+    const data = await res.json();
+    if (!data || data.length === 0) return null;
+    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  } catch {
+    return null;
+  }
+}
+
+export const CURRENCIES = [
+  { code: "USD", label: "US Dollar (USD)" },
+  { code: "EUR", label: "Euro (EUR)" },
+  { code: "GBP", label: "British Pound (GBP)" },
+  { code: "CAD", label: "Canadian Dollar (CAD)" },
+  { code: "AUD", label: "Australian Dollar (AUD)" },
+  { code: "JPY", label: "Japanese Yen (JPY)" },
+  { code: "CHF", label: "Swiss Franc (CHF)" },
+  { code: "CNY", label: "Chinese Yuan (CNY)" },
+  { code: "INR", label: "Indian Rupee (INR)" },
+  { code: "NGN", label: "Nigerian Naira (NGN)" },
+  { code: "GHS", label: "Ghanaian Cedi (GHS)" },
+  { code: "KES", label: "Kenyan Shilling (KES)" },
+  { code: "ZAR", label: "South African Rand (ZAR)" },
+  { code: "XAF", label: "Central African CFA Franc (XAF)" },
+  { code: "XOF", label: "West African CFA Franc (XOF)" },
+  { code: "BRL", label: "Brazilian Real (BRL)" },
+  { code: "MXN", label: "Mexican Peso (MXN)" },
+  { code: "AED", label: "UAE Dirham (AED)" },
+  { code: "SAR", label: "Saudi Riyal (SAR)" },
+  { code: "SGD", label: "Singapore Dollar (SGD)" },
+];
