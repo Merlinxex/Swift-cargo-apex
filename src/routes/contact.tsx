@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Building2, Clock, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Mail, Send } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,33 +15,32 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Get in touch with Swift Cargo Apex. Phone, email and office addresses for sales, support and 24/7 operations.",
+          "Get in touch with Swift Cargo Apex via email for all your shipping and logistics enquiries.",
       },
       { property: "og:title", content: "Contact Swift Cargo Apex" },
       {
         property: "og:description",
-        content: "Reach our sales, support and operations teams across Europe.",
+        content: "Reach our team by email for sales, support and logistics enquiries.",
       },
     ],
   }),
   component: ContactPage,
 });
 
-const OFFICES = [
+const CONTACT_EMAIL = "swiftcargodeliveryservice4@gmail.com";
+
+const GALLERY_IMAGES = [
   {
-    city: "Hamburg (HQ)",
-    address: "Hafencity Allee 12, 20457 Hamburg, Germany",
-    phone: "+49 40 5566 7788",
+    url: "https://ytsvvygxulgnttebhoqr.supabase.co/storage/v1/object/public/images/photo_2026-07-08_00-34-02.jpg",
+    alt: "Container ship at port",
   },
   {
-    city: "Rotterdam",
-    address: "Wilhelminakade 88, 3072 AR Rotterdam, Netherlands",
-    phone: "+31 10 223 4455",
+    url: "https://ytsvvygxulgnttebhoqr.supabase.co/storage/v1/object/public/images/photo_2026-07-08_00-33-41.jpg",
+    alt: "Port crane operations",
   },
   {
-    city: "Madrid",
-    address: "Calle Serrano 41, 28001 Madrid, Spain",
-    phone: "+34 91 234 5678",
+    url: "https://ytsvvygxulgnttebhoqr.supabase.co/storage/v1/object/public/images/photo_2026-07-08_00-33-47.jpg",
+    alt: "Courier delivery service",
   },
 ];
 
@@ -51,7 +50,6 @@ function ContactPage() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
-    // Demo only — wire to a backend later.
     await new Promise((r) => setTimeout(r, 600));
     setSubmitting(false);
     (e.target as HTMLFormElement).reset();
@@ -82,57 +80,103 @@ function ContactPage() {
             <span style={{ color: "var(--accent)" }}>together.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base text-hero-foreground/80 md:text-lg">
-            Sales, support, claims or a quick quote — pick the channel that suits you. Our team
-            replies within one business day, around the clock for active shipments.
+            Have a question about a shipment, need a quote, or want to get started? Drop us an
+            email and our team will get back to you within one business day.
           </p>
+
+          {/* Email CTA in hero */}
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mt-8 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+            style={{ background: "var(--gradient-accent)" }}
+          >
+            <Mail className="h-4 w-4" />
+            {CONTACT_EMAIL}
+          </a>
         </div>
       </section>
 
-      {/* Quick contact tiles */}
-      <section className="container mx-auto max-w-6xl px-4 py-14">
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            {
-              icon: Phone,
-              title: "Call us",
-              line1: "+49 40 5566 7788",
-              line2: "Mon–Fri · 08:00–20:00 CET",
-            },
-            {
-              icon: Mail,
-              title: "Email",
-              line1: "hello@swiftcargo.com",
-              line2: "support@swiftcargo.com",
-            },
-            {
-              icon: Clock,
-              title: "24/7 Operations",
-              line1: "+49 40 5566 7000",
-              line2: "For active shipments only",
-            },
-          ].map(({ icon: Icon, title, line1, line2 }) => (
+      {/* Image strip */}
+      <section className="container mx-auto max-w-6xl px-4 py-10">
+        <div className="grid gap-4 sm:grid-cols-3">
+          {GALLERY_IMAGES.map((img) => (
             <div
-              key={title}
-              className="rounded-2xl border border-border bg-card p-6"
+              key={img.url}
+              className="aspect-video overflow-hidden rounded-2xl border border-border"
               style={{ boxShadow: "var(--shadow-elegant)" }}
             >
-              <div
-                className="mb-4 grid h-11 w-11 place-items-center rounded-lg"
-                style={{ background: "var(--gradient-accent)" }}
-              >
-                <Icon className="h-5 w-5 text-accent-foreground" />
-              </div>
-              <h3 className="text-lg font-bold">{title}</h3>
-              <div className="mt-2 text-sm font-medium">{line1}</div>
-              <div className="text-xs text-muted-foreground">{line2}</div>
+              <img
+                src={img.url}
+                alt={img.alt}
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              />
             </div>
           ))}
         </div>
       </section>
 
-      {/* Form + offices */}
+      {/* Email card + Form */}
       <section className="container mx-auto max-w-6xl px-4 pb-20">
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.3fr]">
+
+          {/* Email info card */}
+          <div className="flex flex-col gap-6">
+            <div
+              className="rounded-2xl p-8 text-hero-foreground"
+              style={{ background: "var(--gradient-hero)" }}
+            >
+              <div
+                className="mb-5 grid h-12 w-12 place-items-center rounded-xl"
+                style={{ background: "var(--gradient-accent)" }}
+              >
+                <Mail className="h-6 w-6 text-accent-foreground" />
+              </div>
+              <h2 className="text-2xl font-extrabold">Get in touch</h2>
+              <p className="mt-3 text-sm opacity-80 leading-relaxed">
+                Whether it's a new shipment enquiry, tracking support, customs clearance, or a
+                general question — we're here to help. Email us and we'll route your message to
+                the right team.
+              </p>
+              <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs uppercase tracking-widest opacity-60 mb-1">Email us at</div>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-sm font-semibold break-all hover:underline"
+                  style={{ color: "var(--accent)" }}
+                >
+                  {CONTACT_EMAIL}
+                </a>
+              </div>
+              <p className="mt-4 text-xs opacity-50">
+                We aim to respond within one business day.
+              </p>
+            </div>
+
+            {/* What to include tip */}
+            <div
+              className="rounded-2xl border border-border bg-card p-6"
+              style={{ boxShadow: "var(--shadow-elegant)" }}
+            >
+              <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground mb-3">
+                What to include in your email
+              </h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {[
+                  "Origin and destination of shipment",
+                  "Type and weight of cargo",
+                  "Preferred shipping timeline",
+                  "Any special handling requirements",
+                ].map((tip) => (
+                  <li key={tip} className="flex items-start gap-2">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--accent)" }} />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Contact form */}
           <form
             onSubmit={onSubmit}
             className="rounded-2xl border border-border bg-card p-6 md:p-8"
@@ -140,7 +184,7 @@ function ContactPage() {
           >
             <h2 className="text-2xl font-extrabold tracking-tight">Send us a message</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Tell us about your shipment or request and we'll route you to the right team.
+              Fill in the form below and we'll reply to your email address.
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -149,11 +193,11 @@ function ContactPage() {
                 <Input id="name" name="name" required className="mt-1.5" placeholder="Jane Doe" />
               </div>
               <div>
-                <Label htmlFor="company">Company</Label>
-                <Input id="company" name="company" className="mt-1.5" placeholder="Acme GmbH" />
+                <Label htmlFor="company">Company <span className="text-muted-foreground font-normal">(optional)</span></Label>
+                <Input id="company" name="company" className="mt-1.5" placeholder="Acme Ltd" />
               </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
+              <div className="sm:col-span-2">
+                <Label htmlFor="email">Your email address</Label>
                 <Input
                   id="email"
                   name="email"
@@ -163,10 +207,6 @@ function ContactPage() {
                   placeholder="jane@acme.com"
                 />
               </div>
-              <div>
-                <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" className="mt-1.5" placeholder="+49 ..." />
-              </div>
             </div>
 
             <div className="mt-4">
@@ -175,7 +215,7 @@ function ContactPage() {
                 id="message"
                 name="message"
                 required
-                rows={5}
+                rows={6}
                 className="mt-1.5"
                 placeholder="Describe your shipment, lane or question..."
               />
@@ -189,51 +229,23 @@ function ContactPage() {
             >
               {submitting ? "Sending..." : "Send message"} <Send className="h-4 w-4" />
             </Button>
+
+            <p className="mt-4 text-xs text-muted-foreground">
+              We'll reply to your email at{" "}
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="font-medium hover:underline"
+                style={{ color: "var(--accent)" }}
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </p>
           </form>
-
-          <div className="space-y-4">
-            <div
-              className="rounded-2xl p-6 text-hero-foreground"
-              style={{ background: "var(--gradient-hero)" }}
-            >
-              <div className="flex items-center gap-2 text-xs uppercase tracking-wider opacity-80">
-                <Building2 className="h-3.5 w-3.5" /> Headquarters
-              </div>
-              <div className="mt-2 text-2xl font-extrabold">Hamburg, Germany</div>
-              <p className="mt-2 text-sm opacity-80">
-                Our global operations centre — where every shipment is monitored 24/7.
-              </p>
-            </div>
-
-            {OFFICES.map((o) => (
-              <div key={o.city} className="rounded-2xl border border-border bg-card p-5">
-                <div className="flex items-start gap-3">
-                  <div
-                    className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
-                    style={{ background: "var(--secondary)" }}
-                  >
-                    <MapPin className="h-4 w-4" style={{ color: "var(--accent)" }} />
-                  </div>
-                  <div>
-                    <div className="font-bold">{o.city}</div>
-                    <div className="mt-1 text-sm text-muted-foreground">{o.address}</div>
-                    <a
-                      href={`tel:${o.phone.replace(/\s+/g, "")}`}
-                      className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
-                      style={{ color: "var(--primary)" }}
-                    >
-                      <Phone className="h-3.5 w-3.5" /> {o.phone}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       <footer className="container mx-auto max-w-6xl px-4 py-10 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Swift Cargo Apex. Powered by OpenStreetMap.
+        © {new Date().getFullYear()} Swift Cargo Apex. All rights reserved.
       </footer>
     </div>
   );
