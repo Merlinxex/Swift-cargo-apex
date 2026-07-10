@@ -162,8 +162,29 @@ export function formatShippedDate(iso: string | null | undefined): string {
 
 export function formatEta(minutes: number): string {
   if (minutes <= 0) return "Arrived";
-  const days = Math.max(1, Math.round(minutes / 1440));
-  return days === 1 ? "1 day" : `${days} days`;
+
+  const totalMinutes = Math.round(minutes);
+
+  if (totalMinutes < 60) {
+    return totalMinutes === 1 ? "1 minute" : `${totalMinutes} minutes`;
+  }
+
+  if (totalMinutes < 1440) {
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    const hoursPart = hours === 1 ? "1 hour" : `${hours} hours`;
+    if (mins === 0) return hoursPart;
+    const minsPart = mins === 1 ? "1 minute" : `${mins} minutes`;
+    return `${hoursPart} ${minsPart}`;
+  }
+
+  const days = Math.floor(totalMinutes / 1440);
+  const remMinutes = totalMinutes % 1440;
+  const hours = Math.floor(remMinutes / 60);
+  const daysPart = days === 1 ? "1 day" : `${days} days`;
+  if (hours === 0) return daysPart;
+  const hoursPart = hours === 1 ? "1 hour" : `${hours} hours`;
+  return `${daysPart} ${hoursPart}`;
 }
 
 /** Format a currency amount with the correct symbol */
