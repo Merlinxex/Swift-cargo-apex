@@ -151,7 +151,7 @@ function AdminPage() {
       current_lat: String(s.currentPosition.lat),
       current_lng: String(s.currentPosition.lng),
       progress: String(Math.round(s.progress * 100)),
-      eta_minutes: String(Math.max(0, Math.round(s.etaMinutes / 1440))),
+      eta_minutes: String(Math.max(0, Math.round(s.etaMinutes))),
       carrier: s.carrier,
       weight: s.weight ?? "",
       service: s.service ?? "",
@@ -231,7 +231,7 @@ function AdminPage() {
       current_lat: parseFloat(form.current_lat) || parseFloat(form.origin_lat) || 0,
       current_lng: parseFloat(form.current_lng) || parseFloat(form.origin_lng) || 0,
       progress: Math.max(0, Math.min(100, parseInt(form.progress || "0", 10))),
-      eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)) * 1440,
+      eta_minutes: Math.max(0, parseInt(form.eta_minutes || "0", 10)),
       carrier: form.carrier.trim() || "Swift Cargo Apex",
       weight: form.weight.trim() || null,
       service: form.service.trim() || null,
@@ -348,7 +348,7 @@ function AdminPage() {
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Route</th>
                   <th className="px-4 py-3">Progress</th>
-                  <th className="px-4 py-3">ETA (days)</th>
+                  <th className="px-4 py-3">ETA (minutes)</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -380,7 +380,7 @@ function AdminPage() {
                       {s.origin.name} → {s.destination.name}
                     </td>
                     <td className="px-4 py-3">{Math.round(s.progress * 100)}%</td>
-                    <td className="px-4 py-3">{Math.max(0, Math.round(s.etaMinutes / 1440))}</td>
+                    <td className="px-4 py-3">{Math.max(0, Math.round(s.etaMinutes))}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
                         <Button size="sm" variant="ghost" onClick={() => openEdit(s)}>
@@ -475,7 +475,7 @@ function AdminPage() {
 
             <Field label="Progress (%)" value={form.progress}
               onChange={(v) => setForm({ ...form, progress: v })} />
-            <Field label="ETA (days)" value={form.eta_minutes}
+            <Field label="ETA (minutes)" value={form.eta_minutes}
               onChange={(v) => setForm({ ...form, eta_minutes: v })} />
 
             <Field label="Carrier" value={form.carrier}
